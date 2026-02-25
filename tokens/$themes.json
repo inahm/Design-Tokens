@@ -1,5 +1,4 @@
 {
-  "$themes": [],
   "$metadata": {
     "tokenSetOrder": [
       "primitives",
@@ -7,5 +6,6 @@
       "components",
       "themes"
     ]
-  }
+  },
+  "$themes": []
 }
