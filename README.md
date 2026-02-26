@@ -4,6 +4,10 @@ This repo defines design tokens in a single `tokens.json` file, split into **Pri
 
 ### Primitives
 
+- **Core colors (fixed “identity” colors)**
+  - **`color.core.white`**: canonical UI white (`#FFFFFF`), used for canvas and surfaces.
+  - **`color.core.ink`**: canonical dark text/surface color (`#0F172A`), used for primary text and inverse surfaces.
+  - **`color.core.brand`**: canonical brand color (`#7C3AED`), used for primary actions and key brand moments.
 - **Color scales**
   - **`color.neutral.0–950`**: neutral ramp, including **`neutral.0` = `#FFFFFF`** for pure white.
   - **`color.primary.50–950`**: brand purple ramp (used for hover/active, accent backgrounds, etc.).
@@ -12,10 +16,6 @@ This repo defines design tokens in a single `tokens.json` file, split into **Pri
   - **`color.accessible.link`**: base blue link color.
   - **`color.accessible.linkHover`** / **`linkVisited`**: hover and visited link blues.
   - **`color.accessible.focusRing`**: blue focus outline color.
-- **Core colors (fixed “identity” colors)**
-  - **`color.core.white`**: canonical UI white (`#FFFFFF`), used for canvas and surfaces.
-  - **`color.core.ink`**: canonical dark text/surface color (`#0F172A`), used for primary text and inverse surfaces.
-  - **`color.core.brand`**: canonical brand color (`#7C3AED`), used for primary actions and key brand moments.
 
 **Guidance:**
 - Use **core colors** when you mean “the” main white/dark/brand.
