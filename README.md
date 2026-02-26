@@ -52,6 +52,16 @@ Semantic tokens live under `Semantics` and describe **usage**, not specific hex 
 - **Focus**
   - **`Semantics.border.focus.ring.accessible`** uses `{color.accessible.focusRing}` so focus stays consistently blue.
 
+### Responsive (token set)
+
+A separate set **`Responsive`** holds viewport-based typography ranges so **Primitives** stays the single canonical scale and **Semantics** stays role-based.
+
+- **`Responsive.fontSize.*`** — for each scale step (`xxs` … `4xl`), **`min`** (mobile, ~392px) and **`max`** (desktop, ~1280px). Use with `clamp(min, preferred, max)` or Webflow fluid type.
+- **`max`** references **`Primitives.fontSize.*`** so the desktop size stays one source of truth.
+- Set order: **Primitives** → **Responsive** → **Semantics**.
+
+Example: body long form → `Responsive.fontSize.md.min` and `Responsive.fontSize.md.max`.
+
 ### Working with tokens
 
 - When adding new components:
