@@ -52,18 +52,18 @@ Semantic tokens live under `Semantics` and describe **usage**, not specific hex 
 - **Focus**
   - **`Semantics.border.focus.ring.accessible`** uses `{color.accessible.focusRing}` so focus stays consistently blue.
 
-### Responsive (token set)
+### Fluid (token set)
 
-A separate set **`Responsive`** holds viewport-based typography ranges so **Primitives** stays the single canonical scale and **Semantics** stays role-based.
+A separate set **`Fluid`** holds viewport-based typography ranges so **Primitives** stays the single canonical scale and **Semantics** stays role-based.
 
-- **`Responsive.fontSize.*`** — for each scale step (`xxs` … `4xl`), **`min`** (mobile, ~392px) and **`max`** (desktop, ~1440px). Use with `clamp(min, preferred, max)` or Webflow fluid type.
-- **`Responsive.scale.*`** — for each spacing step (`xs` … `4xl`), **`min`** (tighter on mobile) and **`max`** (desktop, references **`Primitives.scale.*`**). Use with `clamp()` or responsive spacing in Webflow so layout breathes more on large viewports.
-- **`Responsive.layout.container`** — **`min`** (→ `layout.container.xs`, 392px), **`max`** (→ `layout.container.xl`, 1440px). For fluid max-width: `clamp(min, 100%, max)`.
-- **`Responsive.layout.lineLength`** — **`min`** (→ `layout.lineLength.sm`, 60ch), **`max`** (→ `layout.lineLength.lg`, 80ch). For fluid reading width.
+- **`Fluid.fontSize.*`** — for each scale step (`xxs` … `4xl`), **`min`** (mobile, ~392px) and **`max`** (desktop, ~1440px). Use with `clamp(min, preferred, max)` or Webflow fluid type.
+- **`Fluid.scale.*`** — for each spacing step (`xs` … `4xl`), **`min`** (tighter on mobile) and **`max`** (desktop, references **`Primitives.scale.*`**). Use with `clamp()` or responsive spacing in Webflow so layout breathes more on large viewports.
+- **`Fluid.layout.container`** — **`min`** (→ `layout.container.xs`, 392px), **`max`** (→ `layout.container.xl`, 1440px). For fluid max-width: `clamp(min, 100%, max)`.
+- **`Fluid.layout.lineLength`** — **`min`** (→ `layout.lineLength.sm`, 60ch), **`max`** (→ `layout.lineLength.lg`, 80ch). For fluid reading width.
 - **`max`** (and layout min/max) reference **Primitives** so one source of truth.
-- Set order: **Primitives** → **Responsive** → **Semantics**.
+- Set order: **Primitives** → **Fluid** → **Semantics**.
 
-Examples: body long → `Responsive.fontSize.md.min` / `.max`. Section padding → `Responsive.scale.xl.min` / `.max`. Page container → `Responsive.layout.container.min` / `.max`.
+Examples: body long → `Fluid.fontSize.md.min` / `.max`. Section padding → `Fluid.scale.xl.min` / `.max`. Page container → `Fluid.layout.container.min` / `.max`.
 
 ### Working with tokens
 
