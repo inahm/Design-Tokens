@@ -1,6 +1,6 @@
 # Dark mode primitive mapping
 
-Reference for manually mapping **SemanticsColor.light** semantics to dark-mode primitives in Figma variables. Same semantic roles, suggested dark primitives (adjust to taste).
+Reference for mapping **semantic color tokens** from light to dark. The tables below describe how `color.semantic.light` (light mode) relates to `color.semantic.dark` (dark mode) values, which are exported to Figma as variables in a single `SemanticColors` collection with `light` and `dark` modes.
 
 ---
 
@@ -115,4 +115,23 @@ Reference for manually mapping **SemanticsColor.light** semantics to dark-mode p
 
 ---
 
-In Figma: create a **Dark** variable collection and map each semantic name above to the dark primitive in the right column.
+## Figma export and verification
+
+- **Theme Group → Variable Collection**: In Tokens Studio, the Theme Group `SemanticColors` exports as a Figma Variable collection also named `SemanticColors`.
+- **Themes → Modes**: The Themes `light` and `dark` inside `SemanticColors` export as the `light` and `dark` modes in that collection.
+- **Token sets**:
+  - `color.semantic.light` is enabled for the `light` theme.
+  - `color.semantic.dark` is enabled for the `dark` theme.
+  - Shared primitives live in `foundations.color` and are enabled for both.
+
+**To export and check the variables in Figma:**
+
+1. Open the Tokens Studio plugin in your Figma file.
+2. Go to **Export → Styles & Variables → Export Styles & Variables** (see the Tokens Studio docs for details: `https://docs.tokens.studio/figma/export/themes`).
+3. In **Export Options**, choose to export **Variables** (Styles optional).
+4. On the **Themes** step, select the Theme Group **SemanticColors** and include both Themes: **light** and **dark**.
+5. Run **Export to Figma**.
+6. In Figma, open the **Variables** panel:
+   - Find the collection **SemanticColors**.
+   - Confirm it has exactly two modes: **light** and **dark**.
+   - Check that variables like `background.canvas`, `surface.default`, `text.primary`, etc. change correctly when you switch between the light and dark modes, following the mappings in the tables above.
