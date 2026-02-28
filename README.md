@@ -5,7 +5,7 @@ This repo’s `tokens.json` defines a **responsive, theme‑able design system**
 ### Token architecture
 
 - **Foundations**
-  - **`foundations`**: raw primitives – color ramps, radius, border width, shadows, z‑index, typography foundations (font families, weights, line heights, letter spacing, text case, decoration).
+  - **`foundations`**: raw primitives – color ramps, radius, border width, shadows, z‑index, breakpoints, duration, easing, opacity, typography foundations (font families, weights, line heights, letter spacing, text case, decoration).
   - **`foundations.scale.base`**: desktop layout scale – container widths, line length, icon sizes, media sizes, and spacing in `rem`.
   - **`foundations.scale.mobile` / `foundations.scale.tablet`**: responsive layout/spacing scales for mobile and tablet.
 - **Typography scales**
@@ -39,4 +39,6 @@ This repo’s `tokens.json` defines a **responsive, theme‑able design system**
   - Treat `foundations` and `*.scale.*` as the **source of truth** for scale values.
   - Use the min/max pairs from fluid tokens to generate responsive `clamp()` for type and spacing.
   - Map semantic tokens (typography + color) to component props so themes and future rebrands flow automatically.
+  - **Breakpoints and scale mapping:** `foundations.breakpoints` (xs/sm/md/lg/xl) define media-query widths; `$metadata.scaleByBreakpoint` describes which scale (mobile / tablet / base) applies at which breakpoint.
+  - **Icon size:** `semantics.icon.size.*` resolves to `iconSize` from the **base** scale (see `$metadata.iconSizeResolution`).
 
