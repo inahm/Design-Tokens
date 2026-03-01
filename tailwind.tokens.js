@@ -90,7 +90,13 @@ module.exports = {
     "xs": "0px 1px 2px 0px rgba(10,13,18,0.06)",
     "sm": "0px 2px 4px -1px rgba(10,13,18,0.1)",
     "md": "0px 8px 16px -2px rgba(10,13,18,0.16)",
-    "lg": "0px 16px 32px -4px rgba(10,13,18,0.2)"
+    "lg": "0px 16px 32px -4px rgba(10,13,18,0.2)",
+    "card": "0px 2px 4px -1px rgba(10,13,18,0.1)",
+    "tile": "0px 2px 4px -1px rgba(10,13,18,0.1)",
+    "dropdown": "0px 8px 16px -2px rgba(10,13,18,0.16)",
+    "popover": "0px 8px 16px -2px rgba(10,13,18,0.16)",
+    "modal": "0px 16px 32px -4px rgba(10,13,18,0.2)",
+    "toast": "0px 16px 32px -4px rgba(10,13,18,0.2)"
   },
   "zIndex": {
     "base": "0",
@@ -99,7 +105,12 @@ module.exports = {
     "layer3": "1400",
     "layer4": "1500",
     "layer5": "1700",
-    "max": "2147483647"
+    "max": "2147483647",
+    "dropdown": "1000",
+    "sticky": "1100",
+    "modal": "1400",
+    "popover": "1500",
+    "toast": "1700"
   },
   "screens": {
     "xs": "392px",
@@ -210,6 +221,15 @@ module.exports = {
     "tight": "-2%",
     "wide": "2%"
   },
+  "textTransform": {
+    "uppercase": "uppercase",
+    "lowercase": "lowercase",
+    "capitalize": "capitalize"
+  },
+  "textDecoration": {
+    "underline": "underline",
+    "strike": "line-through"
+  },
   "spacing": {
     "xs": "0.25rem",
     "sm": "0.5rem",
@@ -220,7 +240,58 @@ module.exports = {
     "2xl": "3rem",
     "3xl": "4rem",
     "4xl": "6rem",
-    "5xl": "5rem"
+    "5xl": "5rem",
+    "gap-none": "0rem",
+    "gap-tightest": "0.25rem",
+    "gap-tight": "0.5rem",
+    "gap-comfortable": "1rem",
+    "gap-wide": "1.5rem",
+    "gap-widest": "2rem",
+    "padding-none": "0rem",
+    "padding-tightest": "0.25rem",
+    "padding-tight": "0.5rem",
+    "padding-comfortable": "1rem",
+    "padding-wide": "1.5rem",
+    "padding-widest": "2rem",
+    "padding-chip": "0.25rem",
+    "padding-button": "0.5rem",
+    "padding-card": "1rem",
+    "padding-page": "5rem",
+    "margin-none": "0rem",
+    "margin-tightest": "0.25rem",
+    "margin-tight": "0.5rem",
+    "margin-comfortable": "1rem",
+    "margin-wide": "1.5rem",
+    "margin-widest": "2rem",
+    "margin-page": "5rem"
+  },
+  "maxWidth": {
+    "container-xs": "392px",
+    "container-sm": "640px",
+    "container-md": "768px",
+    "container-lg": "1024px",
+    "container-xl": "1440px",
+    "container-fullSpan": "1440px",
+    "lineLength-sm": "60ch",
+    "lineLength-md": "72ch",
+    "lineLength-lg": "80ch",
+    "media-thumbnail": "160px",
+    "media-card": "360px",
+    "media-hero": "1440px"
+  },
+  "width": {
+    "icon": {
+      "sm": "16px",
+      "md": "20px",
+      "lg": "24px",
+      "xl": "32px"
+    }
+  },
+  "ringWidth": {
+    "focus": "2px"
+  },
+  "ringColor": {
+    "focus": "#3B82F6"
   }
 }
   }

@@ -14,20 +14,24 @@ const cssOutPath = path.join(__dirname, '..', 'tokens.css');
 
 const raw = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
 
-// Flatten token tree to path -> value (primitives only)
+// Flatten token tree to path -> value (primitives + refs)
 const primitives = {};
+const refs = {};
+const PREFIXES = ['', 'foundations.scale.base.', 'foundations.', 'typography.foundations.', 'typography.scale.base.', 'semantics.'];
+
 function walk(obj, prefix = '') {
   if (!obj || typeof obj !== 'object') return;
   for (const [key, val] of Object.entries(obj)) {
     const path = prefix ? `${prefix}.${key}` : key;
     if (val && typeof val === 'object' && 'value' in val) {
       const v = val.value;
-      if (typeof v === 'string' && !v.startsWith('{') && !Array.isArray(v)) {
+      if (typeof v === 'string' && v.startsWith('{') && v.endsWith('}') && !Array.isArray(v)) {
+        refs[path] = v.slice(1, -1).trim();
+      } else if (typeof v === 'string' && !Array.isArray(v)) {
         primitives[path] = v;
       } else if (typeof v === 'number') {
         primitives[path] = v;
       } else if (Array.isArray(v)) {
-        // boxShadow etc. – handle in theme builder
         primitives[path] = val;
       }
     }
@@ -40,11 +44,39 @@ function walk(obj, prefix = '') {
 }
 walk(raw);
 
-// Resolve a single reference like "{color.shadow.base}"
+// Resolve a reference path (e.g. "layout.container.xl" or "spacing.xs") to final value
+const resolvedCache = {};
+function getResolved(refPath) {
+  if (resolvedCache[refPath] !== undefined) return resolvedCache[refPath];
+  for (const prefix of PREFIXES) {
+    const full = prefix ? prefix + refPath : refPath;
+    if (primitives[full] !== undefined && typeof primitives[full] !== 'object') {
+      resolvedCache[refPath] = primitives[full];
+      return primitives[full];
+    }
+    if (refs[full] !== undefined) {
+      const out = getResolved(refs[full]);
+      if (out !== undefined) {
+        resolvedCache[refPath] = out;
+        return out;
+      }
+    }
+  }
+  return undefined;
+}
+
+// Resolve a token value (string or number); if it's a ref "{...}", resolve it
+function resolveVal(val) {
+  if (typeof val === 'string' && val.startsWith('{') && val.endsWith('}')) {
+    return getResolved(val.slice(1, -1).trim()) ?? val;
+  }
+  return val;
+}
+
+// Legacy: resolve a single reference like "{color.shadow.base}" for boxShadow etc.
 function resolveRef(ref) {
   if (typeof ref !== 'string' || !ref.startsWith('{') || !ref.endsWith('}')) return null;
-  const path = ref.slice(1, -1).trim();
-  return primitives[path] ?? null;
+  return getResolved(ref.slice(1, -1).trim()) ?? null;
 }
 
 // Hex to rgba with opacity
@@ -86,7 +118,13 @@ const theme = {
   fontSize: {},
   lineHeight: {},
   letterSpacing: {},
+  textTransform: {},
+  textDecoration: {},
   spacing: {},
+  maxWidth: {},
+  width: {},
+  ringWidth: {},
+  ringColor: {},
 };
 
 function setColor(obj, key, value) {
@@ -205,6 +243,94 @@ for (const [k, v] of Object.entries(letterSpacing)) {
   if (v && v.value) theme.letterSpacing[k] = v.value;
 }
 
+// textCase -> textTransform, textDecoration
+const textCase = typoFoundations.textCase || {};
+for (const [k, v] of Object.entries(textCase)) {
+  if (v && v.value) theme.textTransform[k] = v.value;
+}
+const textDecoration = typoFoundations.textDecoration || {};
+for (const [k, v] of Object.entries(textDecoration)) {
+  if (v && v.value) theme.textDecoration[k] = v.value;
+}
+
+// Layout: container, lineLength, media, iconSize (from foundations.scale.base)
+const scaleBaseLayout = (raw['foundations.scale.base'] && raw['foundations.scale.base'].layout) || {};
+const layoutContainer = scaleBaseLayout.container || {};
+for (const [k, v] of Object.entries(layoutContainer)) {
+  if (v && v.value) {
+    const resolved = resolveVal(v.value);
+    if (typeof resolved === 'string') theme.maxWidth[`container-${k}`] = resolved;
+  }
+}
+const layoutLineLength = scaleBaseLayout.lineLength || {};
+for (const [k, v] of Object.entries(layoutLineLength)) {
+  if (v && v.value) {
+    const resolved = resolveVal(v.value);
+    if (typeof resolved === 'string') theme.maxWidth[`lineLength-${k}`] = resolved;
+  }
+}
+const scaleBaseMedia = (raw['foundations.scale.base'] && raw['foundations.scale.base'].media) || {};
+for (const [k, v] of Object.entries(scaleBaseMedia)) {
+  if (v && v.value) {
+    const resolved = resolveVal(v.value);
+    if (typeof resolved === 'string') theme.maxWidth[`media-${k}`] = resolved;
+  }
+}
+const scaleBaseIconSize = (raw['foundations.scale.base'] && raw['foundations.scale.base'].iconSize) || {};
+for (const [k, v] of Object.entries(scaleBaseIconSize)) {
+  if (v && v.value) {
+    const resolved = resolveVal(v.value);
+    if (typeof resolved === 'string') {
+      if (!theme.width.icon) theme.width.icon = {};
+      theme.width.icon[k] = resolved;
+    }
+  }
+}
+
+// Semantics: layout (gap, padding, margin) -> spacing
+const semanticsLayout = (raw.semantics && raw.semantics.layout) || {};
+for (const group of ['gap', 'padding', 'margin']) {
+  const obj = semanticsLayout[group] || {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (v && v.value !== undefined) {
+      const resolved = resolveVal(v.value);
+      if (typeof resolved === 'string') theme.spacing[`${group}-${k}`] = resolved;
+    }
+  }
+}
+
+// Semantics: focus ring -> ringWidth, ringColor
+const focusRing = raw.semantics?.border?.focus?.ring?.accessible?.value;
+if (focusRing && typeof focusRing === 'object') {
+  if (focusRing.color) {
+    const c = resolveVal(focusRing.color);
+    if (typeof c === 'string') theme.ringColor.focus = c;
+  }
+  if (focusRing.width) {
+    const w = resolveVal(focusRing.width);
+    if (typeof w === 'string') theme.ringWidth.focus = w;
+  }
+}
+
+// Semantics: elevation -> boxShadow aliases (e.g. elevation.card -> shadow.sm)
+const semanticsElevation = (raw.semantics && raw.semantics.elevation) || {};
+for (const [k, v] of Object.entries(semanticsElevation)) {
+  if (v && v.value && typeof v.value === 'string') {
+    const refPath = v.value.slice(1, -1).trim(); // "shadow.sm" -> last part "sm"
+    const shadowKey = refPath.split('.').pop();
+    if (theme.boxShadow[shadowKey]) theme.boxShadow[k] = theme.boxShadow[shadowKey];
+  }
+}
+
+// Semantics: z-index aliases
+const semanticsZIndex = (raw.semantics && raw.semantics['z-index']) || {};
+for (const [k, v] of Object.entries(semanticsZIndex)) {
+  if (v && v.value !== undefined) {
+    const resolved = resolveVal(v.value);
+    if (resolved !== undefined && resolved !== null) theme.zIndex[k] = String(resolved);
+  }
+}
+
 // Remove empty sections
 for (const key of Object.keys(theme)) {
   if (Object.keys(theme[key]).length === 0) delete theme[key];
@@ -306,6 +432,36 @@ for (const [key, value] of Object.entries(theme.lineHeight || {})) {
 // Letter spacing
 for (const [key, value] of Object.entries(theme.letterSpacing || {})) {
   cssVars.push(`  ${toCssVar(`letter-spacing-${key}`)}: ${value};`);
+}
+
+// Text transform (textCase)
+for (const [key, value] of Object.entries(theme.textTransform || {})) {
+  cssVars.push(`  ${toCssVar(`text-transform-${key}`)}: ${value};`);
+}
+
+// Text decoration
+for (const [key, value] of Object.entries(theme.textDecoration || {})) {
+  cssVars.push(`  ${toCssVar(`text-decoration-${key}`)}: ${value};`);
+}
+
+// Max width (container, lineLength, media)
+for (const [key, value] of Object.entries(theme.maxWidth || {})) {
+  cssVars.push(`  ${toCssVar(`max-width-${key}`)}: ${value};`);
+}
+
+// Width (icon sizes)
+if (theme.width && theme.width.icon) {
+  for (const [key, value] of Object.entries(theme.width.icon)) {
+    cssVars.push(`  ${toCssVar(`width-icon-${key}`)}: ${value};`);
+  }
+}
+
+// Ring (focus)
+for (const [key, value] of Object.entries(theme.ringWidth || {})) {
+  cssVars.push(`  ${toCssVar(`ring-width-${key}`)}: ${value};`);
+}
+for (const [key, value] of Object.entries(theme.ringColor || {})) {
+  cssVars.push(`  ${toCssVar(`ring-color-${key}`)}: ${value};`);
 }
 
 const css = `/**
