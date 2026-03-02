@@ -14,9 +14,10 @@ const cssOutPath = path.join(__dirname, '..', 'tokens.css');
 
 const raw = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
 
-// Keep typography.snapshot.web.desktop in sync with typography.scale.base (desktop = canonical base),
-// and derive web.tablet / web.mobile snapshots from the same base using scale factors.
-// iOS typography tokens are intentionally left untouched.
+// Keep typography.snapshot.web.desktop in sync with typography.scale.base (base uses type-1…type-9; snapshots use t-shirt names).
+// Desktop snapshot holds refs to base; tablet/mobile get scaled values; fluid gets min/max. iOS typography tokens are left untouched.
+const TYPE_TO_TSHIRT = ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl']; // type-1 → xxs, type-2 → xs, …
+
 function syncTypographySnapshotsWithBase(json) {
   if (!json || typeof json !== 'object') return;
   const baseScale = json['typography.scale.base'];
@@ -24,107 +25,61 @@ function syncTypographySnapshotsWithBase(json) {
 
   const baseFontSizes = baseScale.fontSize;
 
-  // Ensure snapshot container exists
-  if (!json['typography.snapshot.web.desktop']) {
-    json['typography.snapshot.web.desktop'] = {};
-  }
+  if (!json['typography.snapshot.web.desktop']) json['typography.snapshot.web.desktop'] = {};
   const desktopSnapshot = json['typography.snapshot.web.desktop'];
-  if (!desktopSnapshot.fontSize) {
-    desktopSnapshot.fontSize = {};
-  }
-  const desktopFontSizes = desktopSnapshot.fontSize;
+  if (!desktopSnapshot.fontSize) desktopSnapshot.fontSize = {};
 
-  // Ensure tablet/mobile snapshot containers exist
-  if (!json['typography.snapshot.web.tablet']) {
-    json['typography.snapshot.web.tablet'] = {};
-  }
+  if (!json['typography.snapshot.web.tablet']) json['typography.snapshot.web.tablet'] = {};
   const tabletSnapshot = json['typography.snapshot.web.tablet'];
-  if (!tabletSnapshot.fontSize) {
-    tabletSnapshot.fontSize = {};
-  }
-  const tabletFontSizes = tabletSnapshot.fontSize;
+  if (!tabletSnapshot.fontSize) tabletSnapshot.fontSize = {};
 
-  if (!json['typography.snapshot.web.mobile']) {
-    json['typography.snapshot.web.mobile'] = {};
-  }
+  if (!json['typography.snapshot.web.mobile']) json['typography.snapshot.web.mobile'] = {};
   const mobileSnapshot = json['typography.snapshot.web.mobile'];
-  if (!mobileSnapshot.fontSize) {
-    mobileSnapshot.fontSize = {};
-  }
-  const mobileFontSizes = mobileSnapshot.fontSize;
+  if (!mobileSnapshot.fontSize) mobileSnapshot.fontSize = {};
 
-  // Ensure fluid scale container exists (for clamp() in code)
-  if (!json['typography.scale.fluid']) {
-    json['typography.scale.fluid'] = {};
-  }
+  if (!json['typography.scale.fluid']) json['typography.scale.fluid'] = {};
   const fluidScale = json['typography.scale.fluid'];
-  if (!fluidScale.fontSize) {
-    fluidScale.fontSize = {};
-  }
-  const fluidFontSizes = fluidScale.fontSize;
+  if (!fluidScale.fontSize) fluidScale.fontSize = {};
 
-  // Helper: scale a rem font-size string like "1.333rem" by a factor and keep it readable.
   function scaleRem(value, factor) {
     if (typeof value !== 'string' || !value.endsWith('rem')) return value;
     const num = parseFloat(value.replace('rem', '').trim());
     if (Number.isNaN(num)) return value;
     const scaled = num * factor;
-    // round to 3 decimal places and trim trailing zeros
     const fixed = scaled.toFixed(3);
     const trimmed = fixed.replace(/\.?0+$/, '');
     return `${trimmed}rem`;
   }
 
-  // Copy values from canonical base into desktop snapshot, per size key.
-  for (const [key, entry] of Object.entries(baseFontSizes)) {
+  for (let i = 1; i <= TYPE_TO_TSHIRT.length; i++) {
+    const baseKey = `type-${i}`;
+    const tshirt = TYPE_TO_TSHIRT[i - 1];
+    const entry = baseFontSizes[baseKey];
     if (!entry || typeof entry !== 'object' || entry.value === undefined) continue;
-    if (!desktopFontSizes[key]) {
-      desktopFontSizes[key] = {};
-    }
-    const target = desktopFontSizes[key];
-    target.value = entry.value;
-    // Preserve existing type if present; otherwise mirror base type or default to fontSizes.
-    if (!target.type) {
-      target.type = entry.type || 'fontSizes';
-    }
 
-    // Derive tablet/mobile from base using scale factors.
-    // These represent a conventional responsive typography pattern:
-    // - Tablet: slightly smaller than desktop (factor ~0.9).
-    // - Mobile: more compact for small screens (factor ~0.8).
-    if (!tabletFontSizes[key]) {
-      tabletFontSizes[key] = {};
-    }
-    const tabletTarget = tabletFontSizes[key];
-    tabletTarget.value = scaleRem(entry.value, 0.9);
-    if (!tabletTarget.type) {
-      tabletTarget.type = entry.type || 'fontSizes';
-    }
+    // Desktop: ref to base type-N (so fontSize.xs etc. resolve from snapshot)
+    if (!desktopSnapshot.fontSize[tshirt]) desktopSnapshot.fontSize[tshirt] = {};
+    desktopSnapshot.fontSize[tshirt].value = `{typography.scale.base.fontSize.${baseKey}}`;
+    desktopSnapshot.fontSize[tshirt].type = entry.type || 'fontSizes';
 
-    if (!mobileFontSizes[key]) {
-      mobileFontSizes[key] = {};
-    }
-    const mobileTarget = mobileFontSizes[key];
-    mobileTarget.value = scaleRem(entry.value, 0.8);
-    if (!mobileTarget.type) {
-      mobileTarget.type = entry.type || 'fontSizes';
-    }
+    const tabletVal = scaleRem(entry.value, 0.9);
+    const mobileVal = scaleRem(entry.value, 0.8);
 
-    // Fluid min/max for clamp(): min ~= mobile snapshot, max = desktop/base.
-    if (!fluidFontSizes[key]) {
-      fluidFontSizes[key] = {};
-    }
-    const fluidTarget = fluidFontSizes[key];
-    if (!fluidTarget.min) {
-      fluidTarget.min = {};
-    }
-    fluidTarget.min.value = mobileTarget.value;
-    fluidTarget.min.type = 'fontSizes';
-    if (!fluidTarget.max) {
-      fluidTarget.max = {};
-    }
-    fluidTarget.max.value = entry.value;
-    fluidTarget.max.type = 'fontSizes';
+    if (!tabletSnapshot.fontSize[tshirt]) tabletSnapshot.fontSize[tshirt] = {};
+    tabletSnapshot.fontSize[tshirt].value = tabletVal;
+    tabletSnapshot.fontSize[tshirt].type = entry.type || 'fontSizes';
+
+    if (!mobileSnapshot.fontSize[tshirt]) mobileSnapshot.fontSize[tshirt] = {};
+    mobileSnapshot.fontSize[tshirt].value = mobileVal;
+    mobileSnapshot.fontSize[tshirt].type = entry.type || 'fontSizes';
+
+    if (!fluidScale.fontSize[tshirt]) fluidScale.fontSize[tshirt] = {};
+    if (!fluidScale.fontSize[tshirt].min) fluidScale.fontSize[tshirt].min = {};
+    fluidScale.fontSize[tshirt].min.value = mobileVal;
+    fluidScale.fontSize[tshirt].min.type = 'fontSizes';
+    if (!fluidScale.fontSize[tshirt].max) fluidScale.fontSize[tshirt].max = {};
+    fluidScale.fontSize[tshirt].max.value = entry.value;
+    fluidScale.fontSize[tshirt].max.type = 'fontSizes';
   }
 }
 
@@ -342,7 +297,7 @@ for (const [k, v] of Object.entries(spacingObj)) {
   }
 }
 
-// Typography from typography.foundations and typography.scale.base
+// Typography from typography.foundations and typography.scale.base (type-1…type-9 → t-shirt for Tailwind)
 const typoFoundations = raw['typography.foundations'] || {};
 const typoScale = raw['typography.scale.base'] || {};
 const fontFamily = typoFoundations.fontFamily || {};
@@ -353,9 +308,14 @@ const fontWeight = typoFoundations.fontWeight || {};
 for (const [k, v] of Object.entries(fontWeight)) {
   if (v && v.value !== undefined) theme.fontWeight[k] = v.value;
 }
+const FONT_SIZE_TYPE_TO_TSHIRT = { 'type-1': 'xxs', 'type-2': 'xs', 'type-3': 'sm', 'type-4': 'md', 'type-5': 'lg', 'type-6': 'xl', 'type-7': '2xl', 'type-8': '3xl', 'type-9': '4xl' };
 const fontSize = typoScale.fontSize || {};
 for (const [k, v] of Object.entries(fontSize)) {
-  if (v && v.value) theme.fontSize[k] = [v.value, { lineHeight: '1.5' }];
+  if (v && v.value) {
+    const tshirt = FONT_SIZE_TYPE_TO_TSHIRT[k];
+    const resolved = typeof v.value === 'string' ? resolveVal(v.value) : v.value;
+    if (tshirt != null && resolved !== undefined) theme.fontSize[tshirt] = [resolved, { lineHeight: '1.5' }];
+  }
 }
 const lineHeight = typoFoundations.lineHeight || {};
 for (const [k, v] of Object.entries(lineHeight)) {

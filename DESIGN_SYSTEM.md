@@ -37,29 +37,20 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 - **Web desktop** — `foundations.scale.web.desktop` is reference-only; every value points at `foundations.scale.base`. Exports and Tailwind read base and output t-shirt names.
 - **Web mobile / tablet** — Spacing is scaled down from base (mobile ~0.75×, tablet between mobile and base). Layout (containers, line length, media, icon size) is tuned per viewport; spacing ladder keeps the same keys so semantics stay consistent.
 - **iOS scales** — Same structure as web (layout, media, iconSize, spacing), with values tuned for native. Spacing is also monotonic per scale.
-- **typography (canonical)** — `typography.foundations` (font families, weights), `typography.scale.base` (sizes in rem for desktop reference), and `typography.scale.fluid` (min/max for clamp, derived from base + mobile snapshots). Enable with **ios** set in Token Studio for pixel-perfect Figma; use `.ios` for iPhone frames, `.ios.tablet` for iPad. Web semantics under `web.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
+- **typography (canonical)** — `typography.foundations` (font families, weights), `typography.scale.base` (type scale in rem), and `typography.scale.fluid` (min/max for clamp). Base uses the same **prefix + number** convention: `fontSize.type-1`…`type-9` (no type-0; no zero size). Build script maps type-1…type-9 → xxs…4xl for Tailwind; snapshots use t-shirt names and ref or derive from base. Web semantics under `web.typography.*`; generic names (heading-1, body, caption) are adapter-only.
 
 ### Typography snapshots, fluid scale, and canonical
 
-- **Canonical scale** — `typography.scale.base` (desktop reference):
-  - Defines the **true type system**: hierarchy, ratios, and intended emphasis for code and Swift/SwiftUI.
+- **Canonical type scale** — `typography.scale.base.fontSize` uses **type-1…type-9** (0.563rem … 5.61rem). Same rule as other scales: **0 only when value is 0**; type sizes start at 1.
 - **Figma rendering snapshots** — `typography.snapshot.*`:
-  - Web snapshots:
-    - `typography.snapshot.web.desktop` — kept **numerically 1:1 with the canonical desktop scale**. When you run `node scripts/build-tailwind-tokens.js`, the script syncs `typography.snapshot.web.desktop.fontSize.*` from `typography.scale.base.fontSize.*` so they can’t drift.
-    - `typography.snapshot.web.mobile` — recomputed from the base scale using a **scale factor** (currently ~0.8×) when you run `build-tailwind-tokens.js`.
-    - `typography.snapshot.web.tablet` — recomputed as a **midpoint** between mobile and desktop (currently ~0.9× of base) when you run `build-tailwind-tokens.js`.
-  - iOS snapshots:
-    - `typography.snapshot.ios.phone` (iPhone, pt)
-    - `typography.snapshot.ios.tablet` (iPad, pt)
-  - Exist **only** so Figma layouts render pixel-accurate values (Figma can’t render `clamp()`).
-  - Are **derived from canonical scale** and must never be edited directly; treat them as evaluated outputs at specific contexts.
+  - Web: `typography.snapshot.web.desktop` holds **t-shirt names** (xxs, xs, sm, …) as **refs** to base `type-1`…`type-9`. When you run `build-tailwind-tokens.js`, the script syncs desktop refs, and recomputes **tablet** (~0.9×) and **mobile** (~0.8×) from base values.
+  - iOS: `typography.snapshot.ios.phone` / `.ios.tablet` (pt) are left untouched by the script.
+  - Snapshots are **derived**; edit only the base scale, then re-run the build.
 
 **Fluid scale for code (`clamp()`)**
 
-- `typography.scale.fluid.fontSize.*` is **derived by the generator**, not hand-authored:
-  - `min` ≈ **mobile snapshot** (`typography.snapshot.web.mobile.fontSize.*`).
-  - `max` = **desktop/base size** (`typography.scale.base.fontSize.*`).
-- Code can map these to `clamp(minRem, preferred, maxRem)` using `foundations.breakpoints` to define the viewport range where the fluid behavior applies.
+- `typography.scale.fluid.fontSize.*` (t-shirt keys) is **derived**: `min` ≈ mobile snapshot, `max` = base size. Build script writes these from base type-1…type-9 and the same scale factors.
+- Code can map to `clamp(minRem, preferred, maxRem)` using `foundations.breakpoints`.
 
 **Rules (flow of truth):**
 
