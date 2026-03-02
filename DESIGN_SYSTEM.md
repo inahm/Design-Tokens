@@ -39,8 +39,7 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 | Caption       | `web.typography.meta.caption` |
 | Caption bold  | `web.typography.meta.helper` |
 
-- **color semantics** — `color.semantic.light.*` / `color.semantic.dark.*` (background, surface, text, border, etc.).
-- **web.border.listSeparator** — Color for list/table row dividers. Use in Figma for separator strokes.
+- **color semantics** — `color.semantic.light.*` / `color.semantic.dark.*` (background, surface, text, border, etc.), including `color.semantic.[light|dark].border.listSeparator` for list/table row dividers. Use in Figma for separator strokes (and optionally via `web.border.listSeparator` alias on web).
 - **ios** — **Separate token set** (Token Studio: turn on for iOS, off for web). `ios.interactive.minimumTouchTarget` (44pt), `ios.inset.safeArea.top/bottom/left/right` (pt). Use in Figma for iOS frames; disable the **ios** set when designing web-only.
 - **typography.scale.ios** — **Separate token set** (Token Studio: enable with **ios** for iPhone). `fontSize.*` in pt (11–34). **typography.scale.ios.tablet** — same structure for iPad (pt 12–40); enable instead of or after `.ios` when designing iPad frames. See [IOS_TYPESTYLES.md](IOS_TYPESTYLES.md).
 - **$themes** — Figma-oriented mapping of token sets to modes/collections.
