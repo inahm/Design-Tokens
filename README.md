@@ -6,8 +6,8 @@ This repo’s `tokens.json` defines a **responsive, theme‑able design system**
 
 - **Foundations**
   - **`foundations`**: raw primitives – color ramps, radius, border width, shadows, z‑index, breakpoints, duration, easing, opacity, typography foundations (font families, weights, line heights, letter spacing, text case, decoration).
-  - **`foundations.scale.base`**: desktop layout scale – container widths, line length, icon sizes, media sizes, and spacing in `rem`.
-  - **`foundations.scale.mobile` / `foundations.scale.tablet`**: responsive layout/spacing scales for mobile and tablet.
+  - **`foundations.scale.web.base`**: desktop layout scale – container widths, line length, icon sizes, media sizes, and spacing in `rem` for web / large viewports.
+  - **`foundations.scale.web.mobile` / `foundations.scale.web.tablet`**: responsive web layout/spacing scales for mobile and tablet.
 - **Typography scales**
   - **`typography.foundations`**: font families and weights shared across breakpoints.
   - **`typography.scale.base`**: canonical desktop type scale (`xxs–4xl` in `rem`).

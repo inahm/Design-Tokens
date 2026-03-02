@@ -17,7 +17,7 @@ const raw = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
 // Flatten token tree to path -> value (primitives + refs)
 const primitives = {};
 const refs = {};
-const PREFIXES = ['', 'foundations.scale.base.', 'foundations.', 'typography.foundations.', 'typography.scale.base.', 'web.', 'ios.'];
+const PREFIXES = ['', 'foundations.scale.web.base.', 'foundations.scale.base.', 'foundations.', 'typography.foundations.', 'typography.scale.base.', 'web.', 'ios.'];
 
 function walk(obj, prefix = '') {
   if (!obj || typeof obj !== 'object') return;
@@ -212,8 +212,8 @@ for (const [k, v] of Object.entries(opacity)) {
   if (v && v.value !== undefined) theme.opacity[k] = String(v.value);
 }
 
-// Spacing from foundations.scale.base
-const scaleBase = raw['foundations.scale.base'] || {};
+// Spacing from foundations.scale.web.base (fallback to legacy foundations.scale.base)
+const scaleBase = raw['foundations.scale.web.base'] || raw['foundations.scale.base'] || {};
 const spacingObj = scaleBase.spacing || {};
 for (const [k, v] of Object.entries(spacingObj)) {
   if (v && v.value) theme.spacing[k] = v.value;
@@ -253,8 +253,8 @@ for (const [k, v] of Object.entries(textDecoration)) {
   if (v && v.value) theme.textDecoration[k] = v.value;
 }
 
-// Layout: container, lineLength, media, iconSize (from foundations.scale.base)
-const scaleBaseLayout = (raw['foundations.scale.base'] && raw['foundations.scale.base'].layout) || {};
+// Layout: container, lineLength, media, iconSize (from foundations.scale.web.base; fallback to legacy)
+const scaleBaseLayout = ((raw['foundations.scale.web.base'] || raw['foundations.scale.base'] || {}).layout) || {};
 const layoutContainer = scaleBaseLayout.container || {};
 for (const [k, v] of Object.entries(layoutContainer)) {
   if (v && v.value) {
@@ -269,14 +269,14 @@ for (const [k, v] of Object.entries(layoutLineLength)) {
     if (typeof resolved === 'string') theme.maxWidth[`lineLength-${k}`] = resolved;
   }
 }
-const scaleBaseMedia = (raw['foundations.scale.base'] && raw['foundations.scale.base'].media) || {};
+const scaleBaseMedia = ((raw['foundations.scale.web.base'] || raw['foundations.scale.base'] || {}).media) || {};
 for (const [k, v] of Object.entries(scaleBaseMedia)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
     if (typeof resolved === 'string') theme.maxWidth[`media-${k}`] = resolved;
   }
 }
-const scaleBaseIconSize = (raw['foundations.scale.base'] && raw['foundations.scale.base'].iconSize) || {};
+const scaleBaseIconSize = ((raw['foundations.scale.web.base'] || raw['foundations.scale.base'] || {}).iconSize) || {};
 for (const [k, v] of Object.entries(scaleBaseIconSize)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
