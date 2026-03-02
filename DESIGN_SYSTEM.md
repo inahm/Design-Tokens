@@ -24,7 +24,10 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 
 ## Token structure (for agents)
 
-- **foundations** — Primitives: `foundations.color.*`, `foundations.radius.*`, `foundations.shadow.*`, `foundations.breakpoints.*`, etc. Raw values and scales (e.g. `foundations.scale.base.spacing.*`).
+- **foundations** — Primitives: `foundations.color.*`, `foundations.radius.*`, `foundations.shadow.*`, `foundations.breakpoints.*`, etc. Raw values and layout/spacing scales:
+  - `foundations.scale.base.*` — desktop / large viewport baseline.
+  - `foundations.scale.mobile.*` / `.tablet.*` — web layout scales for small / medium viewports.
+  - `foundations.scale.ios.phone.*` / `.ios.tablet.*` — iOS-specific layout scales for iPhone / iPad (containers, line lengths, media sizes, spacing, icon sizes). Use these when designing **native** iOS layouts so you can tune spacing separately from web while keeping the same semantic naming.
 - **typography** — `typography.foundations` (font families, weights), `typography.scale.base` / `.mobile` / `.tablet` (sizes in rem), `typography.scale.fluid` (min/max for clamp), **`typography.scale.ios`** (iPhone, pt), **`typography.scale.ios.tablet`** (iPad, pt). Enable with **ios** set in Token Studio for pixel-perfect Figma; use `.ios` for iPhone frames, `.ios.tablet` for iPad. Web semantics under `web.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
 
 **Generic typography mapping (for adapters only)** — Use when a tool expects “Heading 1” / “Body” / “Caption”:
