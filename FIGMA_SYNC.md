@@ -2,6 +2,8 @@
 
 The repo is correct: **display font = DM Sans** in `tokens.json` → `typography.foundations.fontFamily.display`.
 
+**Reference paths:** Tokens Studio often can’t accept or display the full token path when linking (e.g. `typography.scale.base.fontSize.type-1`). The token source uses **short paths** for refs (e.g. `{fontSize.type-1}`, `{fontSize.xxs}`) so the plugin can resolve them when the right sets are enabled. Don’t change these to long paths in the JSON.
+
 If Tokens Studio still shows "Google Sans" or variables don’t update in Figma, the plugin is not using this file. Use one of the options below, then run **Export to Figma** again.
 
 ---

@@ -61,14 +61,14 @@ function syncTypographySnapshotsWithBase(json) {
     const entry = baseFontSizes[baseKey];
     if (!entry || typeof entry !== 'object' || entry.value === undefined) continue;
 
-    // typography.scale.web.desktop: ref to base type-N (same pattern as foundations.scale.web.desktop)
+    // typography.scale.web.desktop: ref to base type-N (short path so Tokens Studio can accept it)
     if (!webDesktop.fontSize[tshirt]) webDesktop.fontSize[tshirt] = {};
-    webDesktop.fontSize[tshirt].value = `{typography.scale.base.fontSize.${baseKey}}`;
+    webDesktop.fontSize[tshirt].value = `{fontSize.${baseKey}}`;
     webDesktop.fontSize[tshirt].type = entry.type || 'fontSizes';
 
-    // Snapshot web desktop: link to web.desktop so base → web.desktop → snapshot
+    // Snapshot web desktop: link to web.desktop (short path for plugin)
     if (!desktopSnapshot.fontSize[tshirt]) desktopSnapshot.fontSize[tshirt] = {};
-    desktopSnapshot.fontSize[tshirt].value = `{typography.scale.web.desktop.fontSize.${tshirt}}`;
+    desktopSnapshot.fontSize[tshirt].value = `{fontSize.${tshirt}}`;
     desktopSnapshot.fontSize[tshirt].type = entry.type || 'fontSizes';
 
     const tabletVal = scaleRem(entry.value, 0.9);
