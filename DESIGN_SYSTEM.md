@@ -25,15 +25,15 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 ## Token structure (for agents)
 
 - **foundations** — Primitives: `foundations.color.*`, `foundations.radius.*`, `foundations.shadow.*`, `foundations.breakpoints.*`, etc. Raw values and layout/spacing scales:
-  - `foundations.scale.base.*` — canonical desktop baseline. **Spacing** uses **prefix + number** at the primitive level: `spacing.space-0`…`space-10` (space-0 = 0, then 0.25rem…8rem). Other scale dimensions use step indices: `layout.container.step0`…`step5`, `layout.lineLength.step0`…`step2`, `media.step0`…`step2`, `iconSize.step0`…`step3`. Viewport sets use t-shirt/semantic names and reference base without same-name conflicts in Tokens Studio.
+  - `foundations.scale.base.*` — canonical desktop baseline. **Primitive naming**: prefix + number; **use 0 only when the value is 0**. Spacing: `space-0`…`space-10` (space-0 = 0, then 0.25rem…8rem). Container/lineLength/media/iconSize have no zero value, so they start at 1: `container-1`…`container-6`, `lineLength-1`…`lineLength-3`, `media-1`…`media-3`, `iconSize-1`…`iconSize-4`. Viewport sets use t-shirt/semantic names and reference these primitives.
   - `foundations.scale.web.desktop.*` — **aliased to base** via references; uses t-shirt names (xs, sm, md, …) and points at base (e.g. `spacing.xs` → `{foundations.scale.base.spacing.space-1}`).
   - `foundations.scale.web.mobile.*` / `.web.tablet.*` — web layout scales for small / medium viewports, derived from the base scale (spacing ~0.75× base on mobile, ~midpoint on tablet).
   - `foundations.scale.ios.mobile.*` / `.ios.tablet.*` — iOS-specific layout scales for iPhone / iPad (containers, line lengths, media sizes, spacing, icon sizes). Use these when designing **native** iOS layouts so you can tune spacing separately from web while keeping the same semantic naming.
 
 ### Scale foundations (layout + spacing)
 
-- **Base primitive nomenclature** — In `foundations.scale.base`, **spacing** uses **prefix + number**: `space-0`…`space-10` (space-0 = 0, space-1 = 0.25rem, … space-10 = 8rem). Container, lineLength, media, iconSize use step0…stepN. Viewport sets use **t-shirt/semantic names** and reference base (e.g. `spacing.xs` → `{foundations.scale.base.spacing.space-1}`), avoiding Tokens Studio “same name” conflicts.
-- **Mapping** — Build script maps base → Tailwind/CSS: spacing space-0→0, space-1…space-10→xs…5xl; container step0…step5 → xs, sm, md, lg, xl, fullSpan; lineLength → sm, md, lg; media → thumbnail, card, hero; iconSize → sm, md, lg, xl.
+- **Base primitive nomenclature** — Prefix + number; **0 only when value is 0**. Spacing: `space-0`…`space-10` (space-0 = 0). Container/lineLength/media/iconSize start at 1: `container-1`…`container-6`, `lineLength-1`…`lineLength-3`, `media-1`…`media-3`, `iconSize-1`…`iconSize-4`. Viewport sets use t-shirt/semantic names and reference base.
+- **Mapping** — Build script maps base → Tailwind/CSS: spacing space-0→0, space-1…space-10→xs…5xl; container-1…container-6 → xs, sm, md, lg, xl, fullSpan; lineLength-1…3 → sm, md, lg; media-1…3 → thumbnail, card, hero; iconSize-1…4 → sm, md, lg, xl.
 - **Web desktop** — `foundations.scale.web.desktop` is reference-only; every value points at `foundations.scale.base`. Exports and Tailwind read base and output t-shirt names.
 - **Web mobile / tablet** — Spacing is scaled down from base (mobile ~0.75×, tablet between mobile and base). Layout (containers, line length, media, icon size) is tuned per viewport; spacing ladder keeps the same keys so semantics stay consistent.
 - **iOS scales** — Same structure as web (layout, media, iconSize, spacing), with values tuned for native. Spacing is also monotonic per scale.

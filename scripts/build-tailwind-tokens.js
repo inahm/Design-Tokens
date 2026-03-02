@@ -376,41 +376,41 @@ for (const [k, v] of Object.entries(textDecoration)) {
   if (v && v.value) theme.textDecoration[k] = v.value;
 }
 
-// Layout: container, lineLength, media, iconSize (base uses step0–stepN; map to semantic names for Tailwind)
+// Layout: container, lineLength, media, iconSize (base uses prefix+N starting at 1; map to semantic names for Tailwind)
 const scaleBaseLayout = ((raw['foundations.scale.base'] || raw['foundations.scale.web.base'] || {}).layout) || {};
-const CONTAINER_STEP_TO_TSHIRT = { step0: 'xs', step1: 'sm', step2: 'md', step3: 'lg', step4: 'xl', step5: 'fullSpan' };
+const CONTAINER_TO_TSHIRT = { 'container-1': 'xs', 'container-2': 'sm', 'container-3': 'md', 'container-4': 'lg', 'container-5': 'xl', 'container-6': 'fullSpan' };
 const layoutContainer = scaleBaseLayout.container || {};
 for (const [k, v] of Object.entries(layoutContainer)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
-    const tshirt = CONTAINER_STEP_TO_TSHIRT[k];
+    const tshirt = CONTAINER_TO_TSHIRT[k];
     if (typeof resolved === 'string' && tshirt) theme.maxWidth[`container-${tshirt}`] = resolved;
   }
 }
-const LINELENGTH_STEP_TO_TSHIRT = { step0: 'sm', step1: 'md', step2: 'lg' };
+const LINELENGTH_TO_TSHIRT = { 'lineLength-1': 'sm', 'lineLength-2': 'md', 'lineLength-3': 'lg' };
 const layoutLineLength = scaleBaseLayout.lineLength || {};
 for (const [k, v] of Object.entries(layoutLineLength)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
-    const tshirt = LINELENGTH_STEP_TO_TSHIRT[k];
+    const tshirt = LINELENGTH_TO_TSHIRT[k];
     if (typeof resolved === 'string' && tshirt) theme.maxWidth[`lineLength-${tshirt}`] = resolved;
   }
 }
-const MEDIA_STEP_TO_TSHIRT = { step0: 'thumbnail', step1: 'card', step2: 'hero' };
+const MEDIA_TO_TSHIRT = { 'media-1': 'thumbnail', 'media-2': 'card', 'media-3': 'hero' };
 const scaleBaseMedia = ((raw['foundations.scale.base'] || raw['foundations.scale.web.base'] || {}).media) || {};
 for (const [k, v] of Object.entries(scaleBaseMedia)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
-    const tshirt = MEDIA_STEP_TO_TSHIRT[k];
+    const tshirt = MEDIA_TO_TSHIRT[k];
     if (typeof resolved === 'string' && tshirt) theme.maxWidth[`media-${tshirt}`] = resolved;
   }
 }
-const ICONSIZE_STEP_TO_TSHIRT = { step0: 'sm', step1: 'md', step2: 'lg', step3: 'xl' };
+const ICONSIZE_TO_TSHIRT = { 'iconSize-1': 'sm', 'iconSize-2': 'md', 'iconSize-3': 'lg', 'iconSize-4': 'xl' };
 const scaleBaseIconSize = ((raw['foundations.scale.base'] || raw['foundations.scale.web.base'] || {}).iconSize) || {};
 for (const [k, v] of Object.entries(scaleBaseIconSize)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
-    const tshirt = ICONSIZE_STEP_TO_TSHIRT[k];
+    const tshirt = ICONSIZE_TO_TSHIRT[k];
     if (typeof resolved === 'string' && tshirt) {
       if (!theme.width.icon) theme.width.icon = {};
       theme.width.icon[tshirt] = resolved;
