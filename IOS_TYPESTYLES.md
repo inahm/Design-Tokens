@@ -1,28 +1,46 @@
 # iOS typography scale (Figma + SwiftUI)
 
-Use **typography.scale.ios** in Token Studio when designing for iOS so type sizes in Figma match what ships in the app (pt-based, aligned to Dynamic Type defaults).
+Use **typography.scale.ios** (iPhone) or **typography.scale.ios.tablet** (iPad) in Token Studio when designing for iOS so type sizes in Figma match what ships in the app (pt-based). Same pattern as web: one scale per context.
 
 ---
 
 ## When to use
 
-- **Figma:** Enable the **typography.scale.ios** set (and **ios** set for touch/safe area) when designing iOS frames. Your semantic styles (heading.page, body.long, etc.) will resolve to the pt values below. Disable both when designing web.
-- **SwiftUI:** Use these sizes when implementing type from the design system (or map semantics to Dynamic Type; see DESIGN_SYSTEM.md).
+- **Figma:** Enable **ios** (touch/safe area) plus:
+  - **typography.scale.ios** for **iPhone** frames.
+  - **typography.scale.ios.tablet** for **iPad** frames (enable instead of or after `.ios`; later set wins so tablet overrides iPhone when both are on).
+- **SwiftUI:** Use the scale that matches the device/size class when implementing type.
 
 ---
 
-## Scale (typography.scale.ios)
+## iPhone (typography.scale.ios)
 
-| Token       | Value (pt) | Use / Dynamic Type |
-|------------|------------|---------------------|
-| fontSize.xxs | 11 | Caption 2 |
-| fontSize.xs  | 12 | Caption 1 |
-| fontSize.sm  | 16 | Callout / Subhead |
-| fontSize.md  | 17 | Body |
-| fontSize.lg  | 20 | Title 3 |
-| fontSize.xl  | 22 | Title 2 |
-| fontSize.2xl | 24 | Title 2 large |
-| fontSize.3xl | 28 | Title 1 |
-| fontSize.4xl | 34 | Large Title |
+| Token       | Value (pt) |
+|------------|------------|
+| fontSize.xxs | 11 |
+| fontSize.xs  | 12 |
+| fontSize.sm  | 16 |
+| fontSize.md  | 17 |
+| fontSize.lg  | 20 |
+| fontSize.xl  | 22 |
+| fontSize.2xl | 24 |
+| fontSize.3xl | 28 |
+| fontSize.4xl | 34 |
 
-Semantics unchanged: `heading.page` → 3xl (28pt), `body.long` → md (17pt), `meta.caption` → xs (12pt), etc. Font family and weight still come from **typography.foundations** (Inter, DM Sans).
+---
+
+## iPad (typography.scale.ios.tablet)
+
+| Token       | Value (pt) |
+|------------|------------|
+| fontSize.xxs | 12 |
+| fontSize.xs  | 13 |
+| fontSize.sm  | 17 |
+| fontSize.md  | 19 |
+| fontSize.lg  | 22 |
+| fontSize.xl  | 25 |
+| fontSize.2xl | 28 |
+| fontSize.3xl | 32 |
+| fontSize.4xl | 40 |
+
+Semantics unchanged: same token names (e.g. `heading.page` → 3xl, `body.long` → md); only the resolved pt value changes by scale. Font family and weight from **typography.foundations** (Inter, DM Sans).
