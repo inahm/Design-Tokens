@@ -62,7 +62,7 @@ Create your components and pages in Subframe. They will use the theme you just s
 
 ## Typography mapping
 
-Subframe uses “Heading 1”, “Body”, “Caption”. We keep only semantic names in [tokens.json](tokens.json) (e.g. `heading.page`, `body.long`, `meta.caption`). The mapping from those to Subframe’s names is in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md)—use it when wiring Subframe styles to your tokens.
+Subframe uses “Heading 1”, “Body”, “Caption”. We keep only semantic names in [tokens.json](tokens.json) (e.g. `heading.page`, `body.long`, `meta.caption`). **To copy your token values into Subframe:** use [SUBFRAME_TYPESTYLES.md](SUBFRAME_TYPESTYLES.md)—it lists font, weight, size (px), line height, and letter spacing for each semantic and how they map to Subframe’s default style names.
 
 ## Round corners, fonts, spacing
 
