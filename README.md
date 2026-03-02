@@ -14,7 +14,7 @@ This repo’s `tokens.json` defines a **responsive, theme‑able design system**
   - **`typography.scale.mobile` / `typography.scale.tablet`**: breakpoint‑specific type scales that shrink on smaller viewports.
   - **`typography.scale.fluid`**: min/max `rem` for each size step to drive `clamp()` in code.
 - **Semantics**
-  - **`semantics.typography.*`**: roles like `heading.page`, `body.long`, `label.button`, composed from foundations + scales. **`semantics.typography.generic`** provides tool-friendly aliases (`heading-1`, `heading-2`, `body`, `caption`, etc.) that reference these semantics so adapters (e.g. Subframe’s “Heading 1”) can map without renaming at source.
+  - **`semantics.typography.*`**: roles like `heading.page`, `body.long`, `label.button`, composed from foundations + scales. For tools that expect generic names (e.g. Subframe’s “Heading 1”, “Body”, “Caption”), the mapping is documented in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md)—adapters map at export time; no duplicate aliases in the token source.
   - **`color.semantic.light` / `color.semantic.dark`**: light/dark roles for background, surface, border, text, icons, actions, and status.
 - **Themes**
   - `$themes` map token sets to Figma variable collections/modes (e.g. light/dark colors, desktop/mobile/tablet type scales).

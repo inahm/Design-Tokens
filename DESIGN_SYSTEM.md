@@ -25,19 +25,19 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 ## Token structure (for agents)
 
 - **foundations** — Primitives: `foundations.color.*`, `foundations.radius.*`, `foundations.shadow.*`, `foundations.breakpoints.*`, etc. Raw values and scales (e.g. `foundations.scale.base.spacing.*`).
-- **typography** — `typography.foundations` (font families, weights), `typography.scale.base` / `.mobile` / `.tablet` (sizes in rem), `typography.scale.fluid` (min/max for clamp). Semantics under `semantics.typography.*`: role-based names (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`) and **`semantics.typography.generic`** (tool-friendly aliases: `heading-1`, `heading-2`, `heading-3`, `body`, `body-bold`, `caption`, `caption-bold`) that reference those roles so tools like Subframe can use “Heading 1” / “Body” / “Caption” without changing the source.
+- **typography** — `typography.foundations` (font families, weights), `typography.scale.base` / `.mobile` / `.tablet` (sizes in rem), `typography.scale.fluid` (min/max for clamp). Semantics under `semantics.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
 
-**Generic typography mapping (for adapters)**
+**Generic typography mapping (for adapters only)** — Use when a tool expects “Heading 1” / “Body” / “Caption”:
 
-| Generic token | References (canonical semantic) |
-|---------------|---------------------------------|
-| `heading-1`   | `heading.page`                  |
-| `heading-2`   | `heading.section`               |
-| `heading-3`   | `heading.subsection`            |
-| `body`        | `body.long`                     |
-| `body-bold`   | `label.button`                  |
-| `caption`     | `meta.caption`                  |
-| `caption-bold`| `meta.helper`                  |
+| Generic name  | Map from (canonical semantic) |
+|---------------|--------------------------------|
+| Heading 1     | `semantics.typography.heading.page` |
+| Heading 2     | `semantics.typography.heading.section` |
+| Heading 3     | `semantics.typography.heading.subsection` |
+| Body          | `semantics.typography.body.long` |
+| Body bold     | `semantics.typography.label.button` |
+| Caption       | `semantics.typography.meta.caption` |
+| Caption bold  | `semantics.typography.meta.helper` |
 
 - **color semantics** — `color.semantic.light.*` / `color.semantic.dark.*` (background, surface, text, border, etc.).
 - **$themes** — Figma-oriented mapping of token sets to modes/collections.
