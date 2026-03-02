@@ -4,7 +4,7 @@ This repo is built so **one canonical design system** can drive many frameworks 
 
 ## Principles
 
-1. **Single source of truth** — [tokens.json](tokens.json) is the only canonical definition. All colors, typography, spacing, radius, shadows, and semantics live there. Tools and code consume **exports**, not the raw JSON (except for tooling that reads it directly).
+1. **Single source of truth** — [tokens.json](tokens.json) is the only canonical definition. All colors, typography, spacing, radius, shadows, and semantics (per platform) live there. Tools and code consume **exports**, not the raw JSON (except for tooling that reads it directly).
 
 2. **Semantic names stay at source** — We keep names like `heading.page`, `body.long`, `label.button`, `color.semantic.light.background`. Each **adapter** (Figma, Subframe, Tailwind, etc.) maps these to whatever that tool expects (e.g. Subframe’s Heading 1, or Tailwind’s `text-heading-page`). We don’t rename semantics to match one tool.
 
@@ -25,22 +25,22 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 ## Token structure (for agents)
 
 - **foundations** — Primitives: `foundations.color.*`, `foundations.radius.*`, `foundations.shadow.*`, `foundations.breakpoints.*`, etc. Raw values and scales (e.g. `foundations.scale.base.spacing.*`).
-- **typography** — `typography.foundations` (font families, weights), `typography.scale.base` / `.mobile` / `.tablet` (sizes in rem), `typography.scale.fluid` (min/max for clamp), **`typography.scale.ios`** (iPhone, pt), **`typography.scale.ios.tablet`** (iPad, pt). Enable with **ios** set in Token Studio for pixel-perfect Figma; use `.ios` for iPhone frames, `.ios.tablet` for iPad. Semantics under `semantics.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
+- **typography** — `typography.foundations` (font families, weights), `typography.scale.base` / `.mobile` / `.tablet` (sizes in rem), `typography.scale.fluid` (min/max for clamp), **`typography.scale.ios`** (iPhone, pt), **`typography.scale.ios.tablet`** (iPad, pt). Enable with **ios** set in Token Studio for pixel-perfect Figma; use `.ios` for iPhone frames, `.ios.tablet` for iPad. Web semantics under `web.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
 
 **Generic typography mapping (for adapters only)** — Use when a tool expects “Heading 1” / “Body” / “Caption”:
 
 | Generic name  | Map from (canonical semantic) |
 |---------------|--------------------------------|
-| Heading 1     | `semantics.typography.heading.page` |
-| Heading 2     | `semantics.typography.heading.section` |
-| Heading 3     | `semantics.typography.heading.subsection` |
-| Body          | `semantics.typography.body.long` |
-| Body bold     | `semantics.typography.label.button` |
-| Caption       | `semantics.typography.meta.caption` |
-| Caption bold  | `semantics.typography.meta.helper` |
+| Heading 1     | `web.typography.heading.page` |
+| Heading 2     | `web.typography.heading.section` |
+| Heading 3     | `web.typography.heading.subsection` |
+| Body          | `web.typography.body.long` |
+| Body bold     | `web.typography.label.button` |
+| Caption       | `web.typography.meta.caption` |
+| Caption bold  | `web.typography.meta.helper` |
 
 - **color semantics** — `color.semantic.light.*` / `color.semantic.dark.*` (background, surface, text, border, etc.).
-- **semantics.border.listSeparator** — Color for list/table row dividers. Use in Figma for separator strokes.
+- **web.border.listSeparator** — Color for list/table row dividers. Use in Figma for separator strokes.
 - **ios** — **Separate token set** (Token Studio: turn on for iOS, off for web). `ios.interactive.minimumTouchTarget` (44pt), `ios.inset.safeArea.top/bottom/left/right` (pt). Use in Figma for iOS frames; disable the **ios** set when designing web-only.
 - **typography.scale.ios** — **Separate token set** (Token Studio: enable with **ios** for iPhone). `fontSize.*` in pt (11–34). **typography.scale.ios.tablet** — same structure for iPad (pt 12–40); enable instead of or after `.ios` when designing iPad frames. See [IOS_TYPESTYLES.md](IOS_TYPESTYLES.md).
 - **$themes** — Figma-oriented mapping of token sets to modes/collections.

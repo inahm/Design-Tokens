@@ -17,7 +17,7 @@ const raw = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
 // Flatten token tree to path -> value (primitives + refs)
 const primitives = {};
 const refs = {};
-const PREFIXES = ['', 'foundations.scale.base.', 'foundations.', 'typography.foundations.', 'typography.scale.base.', 'semantics.', 'ios.'];
+const PREFIXES = ['', 'foundations.scale.base.', 'foundations.', 'typography.foundations.', 'typography.scale.base.', 'web.', 'ios.'];
 
 function walk(obj, prefix = '') {
   if (!obj || typeof obj !== 'object') return;
@@ -287,8 +287,8 @@ for (const [k, v] of Object.entries(scaleBaseIconSize)) {
   }
 }
 
-// Semantics: layout (gap, padding, margin) -> spacing
-const semanticsLayout = (raw.semantics && raw.semantics.layout) || {};
+// Web semantics: layout (gap, padding, margin) -> spacing
+const semanticsLayout = (raw.web && raw.web.layout) || {};
 for (const group of ['gap', 'padding', 'margin']) {
   const obj = semanticsLayout[group] || {};
   for (const [k, v] of Object.entries(obj)) {
@@ -299,8 +299,8 @@ for (const group of ['gap', 'padding', 'margin']) {
   }
 }
 
-// Semantics: focus ring -> ringWidth, ringColor
-const focusRing = raw.semantics?.border?.focus?.ring?.accessible?.value;
+// Web semantics: focus ring -> ringWidth, ringColor
+const focusRing = raw.web?.border?.focus?.ring?.accessible?.value;
 if (focusRing && typeof focusRing === 'object') {
   if (focusRing.color) {
     const c = resolveVal(focusRing.color);
@@ -312,8 +312,8 @@ if (focusRing && typeof focusRing === 'object') {
   }
 }
 
-// Semantics: elevation -> boxShadow aliases (e.g. elevation.card -> shadow.sm)
-const semanticsElevation = (raw.semantics && raw.semantics.elevation) || {};
+// Web semantics: elevation -> boxShadow aliases (e.g. elevation.card -> shadow.sm)
+const semanticsElevation = (raw.web && raw.web.elevation) || {};
 for (const [k, v] of Object.entries(semanticsElevation)) {
   if (v && v.value && typeof v.value === 'string') {
     const refPath = v.value.slice(1, -1).trim(); // "shadow.sm" -> last part "sm"
@@ -322,8 +322,8 @@ for (const [k, v] of Object.entries(semanticsElevation)) {
   }
 }
 
-// Semantics: z-index aliases
-const semanticsZIndex = (raw.semantics && raw.semantics['z-index']) || {};
+// Web semantics: z-index aliases
+const semanticsZIndex = (raw.web && raw.web['z-index']) || {};
 for (const [k, v] of Object.entries(semanticsZIndex)) {
   if (v && v.value !== undefined) {
     const resolved = resolveVal(v.value);
@@ -331,8 +331,8 @@ for (const [k, v] of Object.entries(semanticsZIndex)) {
   }
 }
 
-// Semantics: border.listSeparator (color for list/table dividers)
-const listSeparator = raw.semantics?.border?.listSeparator;
+// Web semantics: border.listSeparator (color for list/table dividers)
+const listSeparator = raw.web?.border?.listSeparator;
 if (listSeparator && listSeparator.value) {
   const resolved = resolveVal(listSeparator.value);
   if (typeof resolved === 'string') theme.colors.borderListSeparator = resolved;
