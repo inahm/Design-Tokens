@@ -145,14 +145,14 @@ module.exports = {
     "bold": "700"
   },
   "fontSize": {
-    "xs": [
-      "0.75rem",
+    "xxs": [
+      "0.563rem",
       {
         "lineHeight": "1.5"
       }
     ],
-    "xxs": [
-      "0.563rem",
+    "xs": [
+      "0.75rem",
       {
         "lineHeight": "1.5"
       }
@@ -229,7 +229,7 @@ module.exports = {
     "2xl": "3rem",
     "3xl": "4rem",
     "4xl": "6rem",
-    "5xl": "5rem"
+    "5xl": "8rem"
   },
   "maxWidth": {
     "container-xs": "392px",

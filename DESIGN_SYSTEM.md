@@ -25,9 +25,17 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 ## Token structure (for agents)
 
 - **foundations** — Primitives: `foundations.color.*`, `foundations.radius.*`, `foundations.shadow.*`, `foundations.breakpoints.*`, etc. Raw values and layout/spacing scales:
-  - `foundations.scale.base.*` — canonical desktop / large viewport baseline (containers, line lengths, media sizes, spacing, icon sizes).
-  - `foundations.scale.web.mobile.*` / `.web.tablet.*` — web layout scales for small / medium viewports, derived from the base scale.
+  - `foundations.scale.base.*` — canonical desktop / large viewport baseline (containers, line lengths, media sizes, spacing, icon sizes). **Single source of truth** for desktop scale; edit only here.
+  - `foundations.scale.web.desktop.*` — **aliased to base** via references (`{foundations.scale.base.layout.*}`, etc.). Use in Figma/tools for “web desktop”; values resolve from base so they cannot drift.
+  - `foundations.scale.web.mobile.*` / `.web.tablet.*` — web layout scales for small / medium viewports, derived from the base scale (spacing ~0.75× base on mobile, ~midpoint on tablet).
   - `foundations.scale.ios.mobile.*` / `.ios.tablet.*` — iOS-specific layout scales for iPhone / iPad (containers, line lengths, media sizes, spacing, icon sizes). Use these when designing **native** iOS layouts so you can tune spacing separately from web while keeping the same semantic naming.
+
+### Scale foundations (layout + spacing)
+
+- **Canonical scale** — `foundations.scale.base` defines the desktop baseline. Spacing steps `xs`…`5xl` are **monotonic** (each step ≥ the previous); code and Figma should rely on that order.
+- **Web desktop** — `foundations.scale.web.desktop` is reference-only; every value points at `foundations.scale.base`. Exports and Tailwind use base; Figma token sets can use web.desktop for the same numbers.
+- **Web mobile / tablet** — Spacing is scaled down from base (mobile ~0.75×, tablet between mobile and base). Layout (containers, line length, media, icon size) is tuned per viewport; spacing ladder keeps the same keys so semantics stay consistent.
+- **iOS scales** — Same structure as web (layout, media, iconSize, spacing), with values tuned for native. Spacing is also monotonic per scale.
 - **typography (canonical)** — `typography.foundations` (font families, weights), `typography.scale.base` (sizes in rem for desktop reference), and `typography.scale.fluid` (min/max for clamp, derived from base + mobile snapshots). Enable with **ios** set in Token Studio for pixel-perfect Figma; use `.ios` for iPhone frames, `.ios.tablet` for iPad. Web semantics under `web.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
 
 ### Typography snapshots, fluid scale, and canonical
