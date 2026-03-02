@@ -28,29 +28,36 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
   - `foundations.scale.base.*` — canonical desktop / large viewport baseline (containers, line lengths, media sizes, spacing, icon sizes).
   - `foundations.scale.web.mobile.*` / `.web.tablet.*` — web layout scales for small / medium viewports, derived from the base scale.
   - `foundations.scale.ios.mobile.*` / `.ios.tablet.*` — iOS-specific layout scales for iPhone / iPad (containers, line lengths, media sizes, spacing, icon sizes). Use these when designing **native** iOS layouts so you can tune spacing separately from web while keeping the same semantic naming.
-- **typography (canonical)** — `typography.foundations` (font families, weights), `typography.scale.base` (sizes in rem for desktop reference), and `typography.scale.fluid` (min/max for clamp). Enable with **ios** set in Token Studio for pixel-perfect Figma; use `.ios` for iPhone frames, `.ios.tablet` for iPad. Web semantics under `web.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
+- **typography (canonical)** — `typography.foundations` (font families, weights), `typography.scale.base` (sizes in rem for desktop reference), and `typography.scale.fluid` (min/max for clamp, derived from base + mobile snapshots). Enable with **ios** set in Token Studio for pixel-perfect Figma; use `.ios` for iPhone frames, `.ios.tablet` for iPad. Web semantics under `web.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
 
-### Typography snapshots vs canonical
+### Typography snapshots, fluid scale, and canonical
 
-- **Canonical scale** — `typography.scale.base` (desktop reference) and `typography.scale.fluid`:
-  - Define the **true type system**: hierarchy, ratios, and intended emphasis for code and Swift/SwiftUI.
+- **Canonical scale** — `typography.scale.base` (desktop reference):
+  - Defines the **true type system**: hierarchy, ratios, and intended emphasis for code and Swift/SwiftUI.
 - **Figma rendering snapshots** — `typography.snapshot.*`:
   - Web snapshots:
     - `typography.snapshot.web.desktop` — kept **numerically 1:1 with the canonical desktop scale**. When you run `node scripts/build-tailwind-tokens.js`, the script syncs `typography.snapshot.web.desktop.fontSize.*` from `typography.scale.base.fontSize.*` so they can’t drift.
-    - `typography.snapshot.web.mobile` — hand-tuned today for small viewports (not yet recomputed by a generator).
-    - `typography.snapshot.web.tablet` — hand-tuned today for medium viewports (not yet recomputed by a generator).
+    - `typography.snapshot.web.mobile` — recomputed from the base scale using a **scale factor** (currently ~0.8×) when you run `build-tailwind-tokens.js`.
+    - `typography.snapshot.web.tablet` — recomputed as a **midpoint** between mobile and desktop (currently ~0.9× of base) when you run `build-tailwind-tokens.js`.
   - iOS snapshots:
     - `typography.snapshot.ios.phone` (iPhone, pt)
     - `typography.snapshot.ios.tablet` (iPad, pt)
   - Exist **only** so Figma layouts render pixel-accurate values (Figma can’t render `clamp()`).
   - Are **derived from canonical scale** and must never be edited directly; treat them as evaluated outputs at specific contexts.
 
-**Rules:**
+**Fluid scale for code (`clamp()`)**
 
-- Canonical tokens flow **one-way → snapshots**.
+- `typography.scale.fluid.fontSize.*` is **derived by the generator**, not hand-authored:
+  - `min` ≈ **mobile snapshot** (`typography.snapshot.web.mobile.fontSize.*`).
+  - `max` = **desktop/base size** (`typography.scale.base.fontSize.*`).
+- Code can map these to `clamp(minRem, preferred, maxRem)` using `foundations.breakpoints` to define the viewport range where the fluid behavior applies.
+
+**Rules (flow of truth):**
+
+- Canonical tokens flow **one-way → snapshots → fluid** (for min/max ranges).
 - Never design against canonical tokens in Figma; use the appropriate `typography.snapshot.*` set for the frame’s platform + viewport.
 - Never ship snapshot tokens to production code; exports and adapters should read from `typography.scale.base` / `typography.scale.fluid` and `web.typography.*` / `ios.typography.*` instead.
-- If values drift, update canonical first, then regenerate or re-alias the snapshots.
+- If values drift, update canonical first, then regenerate snapshots + fluid scale via `build-tailwind-tokens.js`.
 
 **Generic typography mapping (for adapters only)** — Use when a tool expects “Heading 1” / “Body” / “Caption”:
 

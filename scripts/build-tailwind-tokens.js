@@ -53,6 +53,16 @@ function syncTypographySnapshotsWithBase(json) {
   }
   const mobileFontSizes = mobileSnapshot.fontSize;
 
+  // Ensure fluid scale container exists (for clamp() in code)
+  if (!json['typography.scale.fluid']) {
+    json['typography.scale.fluid'] = {};
+  }
+  const fluidScale = json['typography.scale.fluid'];
+  if (!fluidScale.fontSize) {
+    fluidScale.fontSize = {};
+  }
+  const fluidFontSizes = fluidScale.fontSize;
+
   // Helper: scale a rem font-size string like "1.333rem" by a factor and keep it readable.
   function scaleRem(value, factor) {
     if (typeof value !== 'string' || !value.endsWith('rem')) return value;
@@ -99,6 +109,22 @@ function syncTypographySnapshotsWithBase(json) {
     if (!mobileTarget.type) {
       mobileTarget.type = entry.type || 'fontSizes';
     }
+
+    // Fluid min/max for clamp(): min ~= mobile snapshot, max = desktop/base.
+    if (!fluidFontSizes[key]) {
+      fluidFontSizes[key] = {};
+    }
+    const fluidTarget = fluidFontSizes[key];
+    if (!fluidTarget.min) {
+      fluidTarget.min = {};
+    }
+    fluidTarget.min.value = mobileTarget.value;
+    fluidTarget.min.type = 'fontSizes';
+    if (!fluidTarget.max) {
+      fluidTarget.max = {};
+    }
+    fluidTarget.max.value = entry.value;
+    fluidTarget.max.type = 'fontSizes';
   }
 }
 

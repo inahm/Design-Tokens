@@ -11,7 +11,9 @@ This repo’s `tokens.json` defines a **responsive, theme‑able design system**
 - **Typography scales**
   - **`typography.foundations`**: font families and weights shared across breakpoints.
   - **`typography.scale.base`**: canonical desktop type scale (`xxs–4xl` in `rem`).
-  - **`typography.scale.fluid`**: min/max `rem` for each size step to drive `clamp()` in code.
+  - **`typography.scale.fluid`**: min/max `rem` for each size step to drive `clamp()` in code, **derived from base + mobile snapshots** by `build-tailwind-tokens.js`:
+    - `min` ≈ `typography.snapshot.web.mobile.fontSize.*`
+    - `max` = `typography.scale.base.fontSize.*`
 - **Web semantics**
   - **`semantics.typography.*`**: roles like `heading.page`, `body.long`, `label.button`, composed from foundations + scales. For tools that expect generic names (e.g. Subframe’s “Heading 1”, “Body”, “Caption”), the mapping is documented in [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md)—adapters map at export time; no duplicate aliases in the token source.
   - **`color.semantic.light` / `color.semantic.dark`**: light/dark roles for background, surface, border, text, icons, actions, and status.
@@ -27,7 +29,7 @@ This repo’s `tokens.json` defines a **responsive, theme‑able design system**
   - Spacing for `md–4xl` is roughly **75% of desktop** (e.g. `1rem → 0.75rem`, `6rem → 4.5rem`).
 - **Tablet**: always the **midpoint in `rem`** between mobile and desktop for that step:
   - \( tablet = (mobile + desktop) / 2 \)
-- **Fluid tokens** (`typography.scale.fluid` and the fluid spacing reference) expose these **min/max** pairs so code can use `clamp(minRem, preferred, maxRem)`.
+- **Fluid tokens** (`typography.scale.fluid` and the fluid spacing reference) expose these **min/max** pairs so code can use `clamp(minRem, preferred, maxRem)` across the same breakpoint range that the snapshots sample (mobile → desktop).
 
 ### How to work with this system
 
