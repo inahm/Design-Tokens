@@ -1,6 +1,6 @@
 ## Design Tokens
 
-This repo’s `tokens.json` defines a **responsive, theme‑able design system** used in Figma (via Tokens Studio) and in code.
+This repo’s `tokens.json` defines a **responsive, theme‑able design system** used in Figma (via Tokens Studio) and in code. It is built as an **agentic, multi-framework** system: one source of truth, many exported formats. See [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) for architecture and how to add new adapters (e.g. another framework or tool).
 
 ### Token architecture
 
@@ -14,7 +14,7 @@ This repo’s `tokens.json` defines a **responsive, theme‑able design system**
   - **`typography.scale.mobile` / `typography.scale.tablet`**: breakpoint‑specific type scales that shrink on smaller viewports.
   - **`typography.scale.fluid`**: min/max `rem` for each size step to drive `clamp()` in code.
 - **Semantics**
-  - **`semantics.typography.*`**: roles like `heading.page`, `body.long`, `label.button`, composed from foundations + scales.
+  - **`semantics.typography.*`**: roles like `heading.page`, `body.long`, `label.button`, composed from foundations + scales. **`semantics.typography.generic`** provides tool-friendly aliases (`heading-1`, `heading-2`, `body`, `caption`, etc.) that reference these semantics so adapters (e.g. Subframe’s “Heading 1”) can map without renaming at source.
   - **`color.semantic.light` / `color.semantic.dark`**: light/dark roles for background, surface, border, text, icons, actions, and status.
 - **Themes**
   - `$themes` map token sets to Figma variable collections/modes (e.g. light/dark colors, desktop/mobile/tablet type scales).
@@ -35,6 +35,8 @@ This repo’s `tokens.json` defines a **responsive, theme‑able design system**
 - **In Figma / Tokens Studio**
   - Enable the relevant token sets for the theme: foundations → `foundations.scale.*` → `typography.*` → semantics → color semantics.
   - Apply **semantic tokens** (typography + color) to components; avoid hard‑wiring primitives in UI.
+- **In Subframe**
+  - Use [SUBFRAME.md](SUBFRAME.md) to import color tokens from `subframe-colors.css` into a Subframe theme, build UI there, and sync to your app (optionally with [tailwind.tokens.js](tailwind.tokens.js) or [tokens.css](tokens.css)).
 - **In code**
   - Treat `foundations` and `*.scale.*` as the **source of truth** for scale values.
   - Use the min/max pairs from fluid tokens to generate responsive `clamp()` for type and spacing.

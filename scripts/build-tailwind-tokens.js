@@ -476,3 +476,9 @@ ${cssVars.join('\n')}
 
 fs.writeFileSync(cssOutPath, css, 'utf8');
 console.log('Wrote', cssOutPath);
+
+// Subframe-ready color export (paste into Subframe Theme → Import)
+require('child_process').execSync('node scripts/export-subframe-colors.js', {
+  cwd: path.join(__dirname, '..'),
+  stdio: 'inherit',
+});

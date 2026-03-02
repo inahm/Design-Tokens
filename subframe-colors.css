@@ -1,0 +1,79 @@
+/**
+ * Subframe Theme → Import tokens
+ * Copy ONE block below (only the variable lines, not the comment).
+ * In Subframe: New palette → name it to match the section → Import → paste → Import.
+ */
+
+
+/* ─── PRIMARY ─── Create palette "Primary", then Import and paste the lines below ─── */
+--color-primary-50: #F5F3FF
+--color-primary-100: #EDE9FE
+--color-primary-200: #DDD6FE
+--color-primary-300: #C4B5FD
+--color-primary-400: #A78BFA
+--color-primary-500: #8B5CF6
+--color-primary-600: #7C3AED
+--color-primary-700: #6D28D9
+--color-primary-800: #5B21B6
+--color-primary-900: #4C1D95
+--color-primary-950: #2E1065
+
+/* ─── NEUTRAL ─── Create palette "Neutral", then Import and paste the lines below ─── */
+--color-neutral-0: #FFFFFF
+--color-neutral-50: #F8FAFC
+--color-neutral-100: #F1F5F9
+--color-neutral-200: #E2E8F0
+--color-neutral-300: #CBD5E1
+--color-neutral-400: #94A3B8
+--color-neutral-500: #64748B
+--color-neutral-600: #475569
+--color-neutral-700: #334155
+--color-neutral-800: #1E293B
+--color-neutral-900: #0F172A
+--color-neutral-950: #020617
+
+/* ─── SUCCESS ─── Create palette "Success", then Import and paste the lines below ─── */
+--color-success-50: #ECFDF5
+--color-success-100: #D1FAE5
+--color-success-200: #A7F3D0
+--color-success-300: #6EE7B7
+--color-success-400: #34D399
+--color-success-500: #10B981
+--color-success-600: #059669
+--color-success-700: #047857
+--color-success-800: #065F46
+--color-success-900: #064E3B
+
+/* ─── WARNING ─── Create palette "Warning", then Import and paste the lines below ─── */
+--color-warning-50: #FFFBEB
+--color-warning-100: #FEF3C7
+--color-warning-200: #FDE68A
+--color-warning-300: #FCD34D
+--color-warning-400: #FBBF24
+--color-warning-500: #F59E0B
+--color-warning-600: #D97706
+--color-warning-700: #B45309
+--color-warning-800: #92400E
+--color-warning-900: #78350F
+
+/* ─── ERROR ─── Create palette "Error", then Import and paste the lines below ─── */
+--color-error-50: #FEF2F2
+--color-error-100: #FEE2E2
+--color-error-200: #FECACA
+--color-error-300: #FCA5A5
+--color-error-400: #F87171
+--color-error-500: #EF4444
+--color-error-600: #DC2626
+--color-error-700: #B91C1C
+--color-error-800: #991B1B
+--color-error-900: #7F1D1D
+
+/* ─── INDIVIDUAL TOKENS ─── Import in "Individual color tokens" (one block or split as needed) ─── */
+--color-core-white: #FFFFFF
+--color-core-ink: #0F172A
+--color-core-brand: #7C3AED
+--color-shadow-base: #0A0D12
+--color-accessible-link: #2563EB
+--color-accessible-link-hover: #1D4ED8
+--color-accessible-link-visited: #1E40AF
+--color-accessible-focus-ring: #3B82F6
