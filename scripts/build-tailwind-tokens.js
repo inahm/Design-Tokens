@@ -330,11 +330,16 @@ for (const [k, v] of Object.entries(opacity)) {
   if (v && v.value !== undefined) theme.opacity[k] = String(v.value);
 }
 
-// Spacing from foundations.scale.base (fallback to legacy foundations.scale.web.base)
+// Spacing from foundations.scale.base (step0–step9) → t-shirt names for Tailwind/CSS
 const scaleBase = raw['foundations.scale.base'] || raw['foundations.scale.web.base'] || {};
 const spacingObj = scaleBase.spacing || {};
+const SPACING_STEP_TO_TSHIRT = { step0: 'xs', step1: 'sm', step2: 'md', step3: 'mdLg', step4: 'lg', step5: 'xl', step6: '2xl', step7: '3xl', step8: '4xl', step9: '5xl' };
 for (const [k, v] of Object.entries(spacingObj)) {
-  if (v && v.value) theme.spacing[k] = v.value;
+  if (v && v.value) {
+    const tshirt = SPACING_STEP_TO_TSHIRT[k];
+    const resolved = typeof v.value === 'string' ? resolveVal(v.value) : v.value;
+    if (tshirt != null && resolved !== undefined) theme.spacing[tshirt] = resolved;
+  }
 }
 
 // Typography from typography.foundations and typography.scale.base
@@ -371,36 +376,44 @@ for (const [k, v] of Object.entries(textDecoration)) {
   if (v && v.value) theme.textDecoration[k] = v.value;
 }
 
-// Layout: container, lineLength, media, iconSize (from foundations.scale.base; fallback to legacy)
+// Layout: container, lineLength, media, iconSize (base uses step0–stepN; map to semantic names for Tailwind)
 const scaleBaseLayout = ((raw['foundations.scale.base'] || raw['foundations.scale.web.base'] || {}).layout) || {};
+const CONTAINER_STEP_TO_TSHIRT = { step0: 'xs', step1: 'sm', step2: 'md', step3: 'lg', step4: 'xl', step5: 'fullSpan' };
 const layoutContainer = scaleBaseLayout.container || {};
 for (const [k, v] of Object.entries(layoutContainer)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
-    if (typeof resolved === 'string') theme.maxWidth[`container-${k}`] = resolved;
+    const tshirt = CONTAINER_STEP_TO_TSHIRT[k];
+    if (typeof resolved === 'string' && tshirt) theme.maxWidth[`container-${tshirt}`] = resolved;
   }
 }
+const LINELENGTH_STEP_TO_TSHIRT = { step0: 'sm', step1: 'md', step2: 'lg' };
 const layoutLineLength = scaleBaseLayout.lineLength || {};
 for (const [k, v] of Object.entries(layoutLineLength)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
-    if (typeof resolved === 'string') theme.maxWidth[`lineLength-${k}`] = resolved;
+    const tshirt = LINELENGTH_STEP_TO_TSHIRT[k];
+    if (typeof resolved === 'string' && tshirt) theme.maxWidth[`lineLength-${tshirt}`] = resolved;
   }
 }
+const MEDIA_STEP_TO_TSHIRT = { step0: 'thumbnail', step1: 'card', step2: 'hero' };
 const scaleBaseMedia = ((raw['foundations.scale.base'] || raw['foundations.scale.web.base'] || {}).media) || {};
 for (const [k, v] of Object.entries(scaleBaseMedia)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
-    if (typeof resolved === 'string') theme.maxWidth[`media-${k}`] = resolved;
+    const tshirt = MEDIA_STEP_TO_TSHIRT[k];
+    if (typeof resolved === 'string' && tshirt) theme.maxWidth[`media-${tshirt}`] = resolved;
   }
 }
+const ICONSIZE_STEP_TO_TSHIRT = { step0: 'sm', step1: 'md', step2: 'lg', step3: 'xl' };
 const scaleBaseIconSize = ((raw['foundations.scale.base'] || raw['foundations.scale.web.base'] || {}).iconSize) || {};
 for (const [k, v] of Object.entries(scaleBaseIconSize)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
-    if (typeof resolved === 'string') {
+    const tshirt = ICONSIZE_STEP_TO_TSHIRT[k];
+    if (typeof resolved === 'string' && tshirt) {
       if (!theme.width.icon) theme.width.icon = {};
-      theme.width.icon[k] = resolved;
+      theme.width.icon[tshirt] = resolved;
     }
   }
 }

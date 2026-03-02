@@ -25,15 +25,16 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 ## Token structure (for agents)
 
 - **foundations** — Primitives: `foundations.color.*`, `foundations.radius.*`, `foundations.shadow.*`, `foundations.breakpoints.*`, etc. Raw values and layout/spacing scales:
-  - `foundations.scale.base.*` — canonical desktop / large viewport baseline (containers, line lengths, media sizes, spacing, icon sizes). **Single source of truth** for desktop scale; edit only here.
-  - `foundations.scale.web.desktop.*` — **aliased to base** via references (`{foundations.scale.base.layout.*}`, etc.). Use in Figma/tools for “web desktop”; values resolve from base so they cannot drift.
+  - `foundations.scale.base.*` — canonical desktop baseline. **All scale dimensions use step nomenclature** in base so viewport sets can use t-shirt/semantic names and reference base without same-name conflicts in Tokens Studio: `spacing.step0`…`step9`, `layout.container.step0`…`step5`, `layout.lineLength.step0`…`step2`, `media.step0`…`step2`, `iconSize.step0`…`step3`.
+  - `foundations.scale.web.desktop.*` — **aliased to base** via references; uses t-shirt names (xs, sm, md, …) for spacing, container, lineLength, media, iconSize and points at the corresponding base steps.
   - `foundations.scale.web.mobile.*` / `.web.tablet.*` — web layout scales for small / medium viewports, derived from the base scale (spacing ~0.75× base on mobile, ~midpoint on tablet).
   - `foundations.scale.ios.mobile.*` / `.ios.tablet.*` — iOS-specific layout scales for iPhone / iPad (containers, line lengths, media sizes, spacing, icon sizes). Use these when designing **native** iOS layouts so you can tune spacing separately from web while keeping the same semantic naming.
 
 ### Scale foundations (layout + spacing)
 
-- **Canonical scale** — `foundations.scale.base` defines the desktop baseline. Spacing steps `xs`…`5xl` are **monotonic** (each step ≥ the previous); code and Figma should rely on that order.
-- **Web desktop** — `foundations.scale.web.desktop` is reference-only; every value points at `foundations.scale.base`. Exports and Tailwind use base; Figma token sets can use web.desktop for the same numbers.
+- **Base step nomenclature** — In `foundations.scale.base`, all scale tokens use **step indices** (no t-shirt names): spacing step0…step9, container step0…step5 (xs→fullSpan), lineLength step0…step2, media step0…step2 (thumbnail, card, hero), iconSize step0…step3. Viewport sets use **t-shirt/semantic names** and reference base (e.g. `container.xs` → `{foundations.scale.base.layout.container.step0}`), avoiding Tokens Studio “same name” conflicts.
+- **Mapping** — Build script maps base steps → semantic names for Tailwind/CSS: spacing step0…step9 → xs…5xl; container step0…step5 → xs, sm, md, lg, xl, fullSpan; lineLength → sm, md, lg; media → thumbnail, card, hero; iconSize → sm, md, lg, xl.
+- **Web desktop** — `foundations.scale.web.desktop` is reference-only; every value points at `foundations.scale.base`. Exports and Tailwind read base and output t-shirt names.
 - **Web mobile / tablet** — Spacing is scaled down from base (mobile ~0.75×, tablet between mobile and base). Layout (containers, line length, media, icon size) is tuned per viewport; spacing ladder keeps the same keys so semantics stay consistent.
 - **iOS scales** — Same structure as web (layout, media, iconSize, spacing), with values tuned for native. Spacing is also monotonic per scale.
 - **typography (canonical)** — `typography.foundations` (font families, weights), `typography.scale.base` (sizes in rem for desktop reference), and `typography.scale.fluid` (min/max for clamp, derived from base + mobile snapshots). Enable with **ios** set in Token Studio for pixel-perfect Figma; use `.ios` for iPhone frames, `.ios.tablet` for iPad. Web semantics under `web.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
