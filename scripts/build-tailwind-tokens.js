@@ -14,8 +14,8 @@ const cssOutPath = path.join(__dirname, '..', 'tokens.css');
 
 const raw = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
 
-// Keep typography.snapshot.web.desktop in sync with typography.scale.base (base uses type-1…type-9; snapshots use t-shirt names).
-// Desktop snapshot holds refs to base; tablet/mobile get scaled values; fluid gets min/max. iOS typography tokens are left untouched.
+// Keep typography.scale.web.desktop and typography.snapshot.web.desktop in sync with typography.scale.base.
+// Base uses type-1…type-9. Web desktop holds refs to base; snapshot links to web desktop. Tablet/mobile get scaled values; fluid gets min/max.
 const TYPE_TO_TSHIRT = ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl']; // type-1 → xxs, type-2 → xs, …
 
 function syncTypographySnapshotsWithBase(json) {
@@ -24,6 +24,10 @@ function syncTypographySnapshotsWithBase(json) {
   if (!baseScale || !baseScale.fontSize) return;
 
   const baseFontSizes = baseScale.fontSize;
+
+  if (!json['typography.scale.web.desktop']) json['typography.scale.web.desktop'] = {};
+  const webDesktop = json['typography.scale.web.desktop'];
+  if (!webDesktop.fontSize) webDesktop.fontSize = {};
 
   if (!json['typography.snapshot.web.desktop']) json['typography.snapshot.web.desktop'] = {};
   const desktopSnapshot = json['typography.snapshot.web.desktop'];
@@ -57,9 +61,14 @@ function syncTypographySnapshotsWithBase(json) {
     const entry = baseFontSizes[baseKey];
     if (!entry || typeof entry !== 'object' || entry.value === undefined) continue;
 
-    // Desktop: ref to base type-N (so fontSize.xs etc. resolve from snapshot)
+    // typography.scale.web.desktop: ref to base type-N (same pattern as foundations.scale.web.desktop)
+    if (!webDesktop.fontSize[tshirt]) webDesktop.fontSize[tshirt] = {};
+    webDesktop.fontSize[tshirt].value = `{typography.scale.base.fontSize.${baseKey}}`;
+    webDesktop.fontSize[tshirt].type = entry.type || 'fontSizes';
+
+    // Snapshot web desktop: link to web.desktop so base → web.desktop → snapshot
     if (!desktopSnapshot.fontSize[tshirt]) desktopSnapshot.fontSize[tshirt] = {};
-    desktopSnapshot.fontSize[tshirt].value = `{typography.scale.base.fontSize.${baseKey}}`;
+    desktopSnapshot.fontSize[tshirt].value = `{typography.scale.web.desktop.fontSize.${tshirt}}`;
     desktopSnapshot.fontSize[tshirt].type = entry.type || 'fontSizes';
 
     const tabletVal = scaleRem(entry.value, 0.9);
@@ -90,7 +99,7 @@ fs.writeFileSync(tokensPath, JSON.stringify(raw, null, 2) + '\n', 'utf8');
 // Flatten token tree to path -> value (primitives + refs)
 const primitives = {};
 const refs = {};
-const PREFIXES = ['', 'foundations.scale.base.', 'foundations.scale.web.base.', 'foundations.', 'typography.foundations.', 'typography.scale.base.', 'web.', 'ios.'];
+const PREFIXES = ['', 'foundations.scale.base.', 'foundations.scale.web.base.', 'foundations.', 'typography.foundations.', 'typography.scale.base.', 'typography.scale.web.desktop.', 'web.', 'ios.'];
 
 function walk(obj, prefix = '') {
   if (!obj || typeof obj !== 'object') return;
