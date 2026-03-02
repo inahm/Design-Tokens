@@ -145,7 +145,7 @@ module.exports = {
       "sans-serif"
     ],
     "display": [
-      "Plus Jakarta Sans",
+      "DM Sans",
       "sans-serif"
     ]
   },
