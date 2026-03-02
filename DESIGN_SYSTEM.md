@@ -25,7 +25,7 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 ## Token structure (for agents)
 
 - **foundations** — Primitives: `foundations.color.*`, `foundations.radius.*`, `foundations.shadow.*`, `foundations.breakpoints.*`, etc. Raw values and scales (e.g. `foundations.scale.base.spacing.*`).
-- **typography** — `typography.foundations` (font families, weights), `typography.scale.base` / `.mobile` / `.tablet` (sizes in rem), `typography.scale.fluid` (min/max for clamp). Semantics under `semantics.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
+- **typography** — `typography.foundations` (font families, weights), `typography.scale.base` / `.mobile` / `.tablet` (sizes in rem), `typography.scale.fluid` (min/max for clamp), **`typography.scale.ios`** (sizes in pt for iOS; enable in Token Studio with **ios** set for pixel-perfect Figma mockups). Semantics under `semantics.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
 
 **Generic typography mapping (for adapters only)** — Use when a tool expects “Heading 1” / “Body” / “Caption”:
 
@@ -42,6 +42,7 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 - **color semantics** — `color.semantic.light.*` / `color.semantic.dark.*` (background, surface, text, border, etc.).
 - **semantics.border.listSeparator** — Color for list/table row dividers. Use in Figma for separator strokes.
 - **ios** — **Separate token set** (Token Studio: turn on for iOS, off for web). `ios.interactive.minimumTouchTarget` (44pt), `ios.inset.safeArea.top/bottom/left/right` (pt). Use in Figma for iOS frames; disable the **ios** set when designing web-only.
+- **typography.scale.ios** — **Separate token set** (Token Studio: enable with **ios** for iOS screens). Overrides `fontSize.*` with pt values (11–34) so semantics (`heading.page`, `body.long`, etc.) resolve to iOS-appropriate sizes. Turn off for web; turn on with **ios** for pixel-perfect iOS type in Figma. See [IOS_TYPESTYLES.md](IOS_TYPESTYLES.md).
 - **$themes** — Figma-oriented mapping of token sets to modes/collections.
 
 Adding a new adapter: read this structure (and resolve references `{path.to.token}`), then write the target format. Prefer reusing the resolution logic in `build-tailwind-tokens.js` if the new format needs the same behavior.
