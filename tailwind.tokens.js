@@ -146,7 +146,7 @@ module.exports = {
   },
   "fontSize": {
     "xs": [
-      "0.8rem",
+      "0.75rem",
       {
         "lineHeight": "1.5"
       }
