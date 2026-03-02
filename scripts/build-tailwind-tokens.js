@@ -330,13 +330,13 @@ for (const [k, v] of Object.entries(opacity)) {
   if (v && v.value !== undefined) theme.opacity[k] = String(v.value);
 }
 
-// Spacing from foundations.scale.base (step0–step9) → t-shirt names for Tailwind/CSS
+// Spacing from foundations.scale.base (space-0…space-10) → t-shirt names for Tailwind/CSS
 const scaleBase = raw['foundations.scale.base'] || raw['foundations.scale.web.base'] || {};
 const spacingObj = scaleBase.spacing || {};
-const SPACING_STEP_TO_TSHIRT = { step0: 'xs', step1: 'sm', step2: 'md', step3: 'mdLg', step4: 'lg', step5: 'xl', step6: '2xl', step7: '3xl', step8: '4xl', step9: '5xl' };
+const SPACING_SPACE_TO_TSHIRT = { 'space-0': '0', 'space-1': 'xs', 'space-2': 'sm', 'space-3': 'md', 'space-4': 'mdLg', 'space-5': 'lg', 'space-6': 'xl', 'space-7': '2xl', 'space-8': '3xl', 'space-9': '4xl', 'space-10': '5xl' };
 for (const [k, v] of Object.entries(spacingObj)) {
   if (v && v.value) {
-    const tshirt = SPACING_STEP_TO_TSHIRT[k];
+    const tshirt = SPACING_SPACE_TO_TSHIRT[k];
     const resolved = typeof v.value === 'string' ? resolveVal(v.value) : v.value;
     if (tshirt != null && resolved !== undefined) theme.spacing[tshirt] = resolved;
   }
