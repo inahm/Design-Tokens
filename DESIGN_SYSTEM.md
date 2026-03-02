@@ -25,8 +25,8 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 ## Token structure (for agents)
 
 - **foundations** — Primitives: `foundations.color.*`, `foundations.radius.*`, `foundations.shadow.*`, `foundations.breakpoints.*`, etc. Raw values and layout/spacing scales:
-  - `foundations.scale.web.base.*` — web desktop / large viewport baseline.
-  - `foundations.scale.web.mobile.*` / `.web.tablet.*` — web layout scales for small / medium viewports.
+  - `foundations.scale.base.*` — canonical desktop / large viewport baseline (containers, line lengths, media sizes, spacing, icon sizes).
+  - `foundations.scale.web.mobile.*` / `.web.tablet.*` — web layout scales for small / medium viewports, derived from the base scale.
   - `foundations.scale.ios.mobile.*` / `.ios.tablet.*` — iOS-specific layout scales for iPhone / iPad (containers, line lengths, media sizes, spacing, icon sizes). Use these when designing **native** iOS layouts so you can tune spacing separately from web while keeping the same semantic naming.
 - **typography (canonical)** — `typography.foundations` (font families, weights), `typography.scale.base` (sizes in rem for desktop reference), and `typography.scale.fluid` (min/max for clamp). Enable with **ios** set in Token Studio for pixel-perfect Figma; use `.ios` for iPhone frames, `.ios.tablet` for iPad. Web semantics under `web.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
 
