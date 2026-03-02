@@ -66,9 +66,9 @@ function syncTypographySnapshotsWithBase(json) {
     webDesktop.fontSize[tshirt].value = `{fontSize.${baseKey}}`;
     webDesktop.fontSize[tshirt].type = entry.type || 'fontSizes';
 
-    // Snapshot web desktop: link to web.desktop (short path for plugin)
+    // Snapshot web desktop: map t-shirt key to numeric primitive (type-N) so it resolves from base
     if (!desktopSnapshot.fontSize[tshirt]) desktopSnapshot.fontSize[tshirt] = {};
-    desktopSnapshot.fontSize[tshirt].value = `{fontSize.${tshirt}}`;
+    desktopSnapshot.fontSize[tshirt].value = `{fontSize.${baseKey}}`;
     desktopSnapshot.fontSize[tshirt].type = entry.type || 'fontSizes';
 
     const tabletVal = scaleRem(entry.value, 0.9);
