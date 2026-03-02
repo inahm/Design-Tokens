@@ -14,8 +14,9 @@ const cssOutPath = path.join(__dirname, '..', 'tokens.css');
 
 const raw = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
 
-// Keep typography.snapshot.web.desktop in sync with typography.scale.base (desktop = canonical base).
-// Does NOT touch mobile/tablet snapshots or any iOS typography.
+// Keep typography.snapshot.web.desktop in sync with typography.scale.base (desktop = canonical base),
+// and derive web.tablet / web.mobile snapshots from the same base using scale factors.
+// iOS typography tokens are intentionally left untouched.
 function syncTypographySnapshotsWithBase(json) {
   if (!json || typeof json !== 'object') return;
   const baseScale = json['typography.scale.base'];
@@ -33,6 +34,37 @@ function syncTypographySnapshotsWithBase(json) {
   }
   const desktopFontSizes = desktopSnapshot.fontSize;
 
+  // Ensure tablet/mobile snapshot containers exist
+  if (!json['typography.snapshot.web.tablet']) {
+    json['typography.snapshot.web.tablet'] = {};
+  }
+  const tabletSnapshot = json['typography.snapshot.web.tablet'];
+  if (!tabletSnapshot.fontSize) {
+    tabletSnapshot.fontSize = {};
+  }
+  const tabletFontSizes = tabletSnapshot.fontSize;
+
+  if (!json['typography.snapshot.web.mobile']) {
+    json['typography.snapshot.web.mobile'] = {};
+  }
+  const mobileSnapshot = json['typography.snapshot.web.mobile'];
+  if (!mobileSnapshot.fontSize) {
+    mobileSnapshot.fontSize = {};
+  }
+  const mobileFontSizes = mobileSnapshot.fontSize;
+
+  // Helper: scale a rem font-size string like "1.333rem" by a factor and keep it readable.
+  function scaleRem(value, factor) {
+    if (typeof value !== 'string' || !value.endsWith('rem')) return value;
+    const num = parseFloat(value.replace('rem', '').trim());
+    if (Number.isNaN(num)) return value;
+    const scaled = num * factor;
+    // round to 3 decimal places and trim trailing zeros
+    const fixed = scaled.toFixed(3);
+    const trimmed = fixed.replace(/\.?0+$/, '');
+    return `${trimmed}rem`;
+  }
+
   // Copy values from canonical base into desktop snapshot, per size key.
   for (const [key, entry] of Object.entries(baseFontSizes)) {
     if (!entry || typeof entry !== 'object' || entry.value === undefined) continue;
@@ -44,6 +76,28 @@ function syncTypographySnapshotsWithBase(json) {
     // Preserve existing type if present; otherwise mirror base type or default to fontSizes.
     if (!target.type) {
       target.type = entry.type || 'fontSizes';
+    }
+
+    // Derive tablet/mobile from base using scale factors.
+    // These represent a conventional responsive typography pattern:
+    // - Tablet: slightly smaller than desktop (factor ~0.9).
+    // - Mobile: more compact for small screens (factor ~0.8).
+    if (!tabletFontSizes[key]) {
+      tabletFontSizes[key] = {};
+    }
+    const tabletTarget = tabletFontSizes[key];
+    tabletTarget.value = scaleRem(entry.value, 0.9);
+    if (!tabletTarget.type) {
+      tabletTarget.type = entry.type || 'fontSizes';
+    }
+
+    if (!mobileFontSizes[key]) {
+      mobileFontSizes[key] = {};
+    }
+    const mobileTarget = mobileFontSizes[key];
+    mobileTarget.value = scaleRem(entry.value, 0.8);
+    if (!mobileTarget.type) {
+      mobileTarget.type = entry.type || 'fontSizes';
     }
   }
 }
