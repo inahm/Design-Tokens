@@ -36,9 +36,9 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
   - Define the **true type system**: hierarchy, ratios, and intended emphasis for code and Swift/SwiftUI.
 - **Figma rendering snapshots** — `typography.snapshot.*`:
   - Web snapshots:
-    - `typography.snapshot.web.mobile`
-    - `typography.snapshot.web.tablet`
-    - `typography.snapshot.web.desktop` (numerically 1:1 with canonical desktop)
+    - `typography.snapshot.web.desktop` — kept **numerically 1:1 with the canonical desktop scale**. When you run `node scripts/build-tailwind-tokens.js`, the script syncs `typography.snapshot.web.desktop.fontSize.*` from `typography.scale.base.fontSize.*` so they can’t drift.
+    - `typography.snapshot.web.mobile` — hand-tuned today for small viewports (not yet recomputed by a generator).
+    - `typography.snapshot.web.tablet` — hand-tuned today for medium viewports (not yet recomputed by a generator).
   - iOS snapshots:
     - `typography.snapshot.ios.phone` (iPhone, pt)
     - `typography.snapshot.ios.tablet` (iPad, pt)

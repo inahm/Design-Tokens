@@ -67,8 +67,7 @@ module.exports = {
     "accessible-link": "#2563EB",
     "accessible-linkHover": "#1D4ED8",
     "accessible-linkVisited": "#1E40AF",
-    "accessible-focusRing": "#3B82F6",
-    "borderListSeparator": "#E2E8F0"
+    "accessible-focusRing": "#3B82F6"
   },
   "borderRadius": {
     "xs": "0.25rem",
@@ -91,13 +90,7 @@ module.exports = {
     "xs": "0px 1px 2px 0px rgba(10,13,18,0.06)",
     "sm": "0px 2px 4px -1px rgba(10,13,18,0.1)",
     "md": "0px 8px 16px -2px rgba(10,13,18,0.16)",
-    "lg": "0px 16px 32px -4px rgba(10,13,18,0.2)",
-    "card": "0px 2px 4px -1px rgba(10,13,18,0.1)",
-    "tile": "0px 2px 4px -1px rgba(10,13,18,0.1)",
-    "dropdown": "0px 8px 16px -2px rgba(10,13,18,0.16)",
-    "popover": "0px 8px 16px -2px rgba(10,13,18,0.16)",
-    "modal": "0px 16px 32px -4px rgba(10,13,18,0.2)",
-    "toast": "0px 16px 32px -4px rgba(10,13,18,0.2)"
+    "lg": "0px 16px 32px -4px rgba(10,13,18,0.2)"
   },
   "zIndex": {
     "base": "0",
@@ -106,12 +99,7 @@ module.exports = {
     "layer3": "1400",
     "layer4": "1500",
     "layer5": "1700",
-    "max": "2147483647",
-    "dropdown": "1000",
-    "sticky": "1100",
-    "modal": "1400",
-    "popover": "1500",
-    "toast": "1700"
+    "max": "2147483647"
   },
   "screens": {
     "xs": "392px",
@@ -158,7 +146,7 @@ module.exports = {
   },
   "fontSize": {
     "xs": [
-      "0.75rem",
+      "0.8rem",
       {
         "lineHeight": "1.5"
       }
@@ -241,34 +229,7 @@ module.exports = {
     "2xl": "3rem",
     "3xl": "4rem",
     "4xl": "6rem",
-    "5xl": "5rem",
-    "gap-none": "0rem",
-    "gap-tightest": "0.25rem",
-    "gap-tight": "0.5rem",
-    "gap-comfortable": "1rem",
-    "gap-wide": "1.5rem",
-    "gap-widest": "2rem",
-    "padding-none": "0rem",
-    "padding-tightest": "0.25rem",
-    "padding-tight": "0.5rem",
-    "padding-comfortable": "1rem",
-    "padding-wide": "1.5rem",
-    "padding-widest": "2rem",
-    "padding-chip": "0.25rem",
-    "padding-button": "0.5rem",
-    "padding-card": "1rem",
-    "padding-page": "5rem",
-    "margin-none": "0rem",
-    "margin-tightest": "0.25rem",
-    "margin-tight": "0.5rem",
-    "margin-comfortable": "1rem",
-    "margin-wide": "1.5rem",
-    "margin-widest": "2rem",
-    "margin-page": "5rem",
-    "iosSafeAreaTop": "59px",
-    "iosSafeAreaBottom": "34px",
-    "iosSafeAreaLeft": "0px",
-    "iosSafeAreaRight": "0px"
+    "5xl": "5rem"
   },
   "maxWidth": {
     "container-xs": "392px",
@@ -291,15 +252,6 @@ module.exports = {
       "lg": "24px",
       "xl": "32px"
     }
-  },
-  "ringWidth": {
-    "focus": "2px"
-  },
-  "ringColor": {
-    "focus": "#3B82F6"
-  },
-  "minWidth": {
-    "iosTouchTarget": "44px"
   }
 }
   }

@@ -14,6 +14,44 @@ const cssOutPath = path.join(__dirname, '..', 'tokens.css');
 
 const raw = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
 
+// Keep typography.snapshot.web.desktop in sync with typography.scale.base (desktop = canonical base).
+// Does NOT touch mobile/tablet snapshots or any iOS typography.
+function syncTypographySnapshotsWithBase(json) {
+  if (!json || typeof json !== 'object') return;
+  const baseScale = json['typography.scale.base'];
+  if (!baseScale || !baseScale.fontSize) return;
+
+  const baseFontSizes = baseScale.fontSize;
+
+  // Ensure snapshot container exists
+  if (!json['typography.snapshot.web.desktop']) {
+    json['typography.snapshot.web.desktop'] = {};
+  }
+  const desktopSnapshot = json['typography.snapshot.web.desktop'];
+  if (!desktopSnapshot.fontSize) {
+    desktopSnapshot.fontSize = {};
+  }
+  const desktopFontSizes = desktopSnapshot.fontSize;
+
+  // Copy values from canonical base into desktop snapshot, per size key.
+  for (const [key, entry] of Object.entries(baseFontSizes)) {
+    if (!entry || typeof entry !== 'object' || entry.value === undefined) continue;
+    if (!desktopFontSizes[key]) {
+      desktopFontSizes[key] = {};
+    }
+    const target = desktopFontSizes[key];
+    target.value = entry.value;
+    // Preserve existing type if present; otherwise mirror base type or default to fontSizes.
+    if (!target.type) {
+      target.type = entry.type || 'fontSizes';
+    }
+  }
+}
+
+// Update in-memory JSON and write back to tokens.json so snapshots stay aligned with the base scale.
+syncTypographySnapshotsWithBase(raw);
+fs.writeFileSync(tokensPath, JSON.stringify(raw, null, 2) + '\n', 'utf8');
+
 // Flatten token tree to path -> value (primitives + refs)
 const primitives = {};
 const refs = {};
