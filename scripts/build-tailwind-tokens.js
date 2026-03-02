@@ -86,8 +86,9 @@ function syncTypographySnapshotsWithBase(json) {
     if (!fluidScale.fontSize[tshirt].min) fluidScale.fontSize[tshirt].min = {};
     fluidScale.fontSize[tshirt].min.value = mobileVal;
     fluidScale.fontSize[tshirt].min.type = 'fontSizes';
+    // Fluid max maps back to numeric primitive (type-N) so snapshot stays single-source
     if (!fluidScale.fontSize[tshirt].max) fluidScale.fontSize[tshirt].max = {};
-    fluidScale.fontSize[tshirt].max.value = entry.value;
+    fluidScale.fontSize[tshirt].max.value = `{fontSize.${baseKey}}`;
     fluidScale.fontSize[tshirt].max.type = 'fontSizes';
   }
 }
@@ -306,7 +307,8 @@ for (const [k, v] of Object.entries(spacingObj)) {
   }
 }
 
-// Typography from typography.foundations and typography.scale.base (type-1…type-9 → t-shirt for Tailwind)
+// Typography from typography.foundations and typography.scale.base (type-1…type-9 → t-shirt for Tailwind).
+// Snapshot/fluid use refs to type-N for Figma; Tailwind and CSS read base only, so map-back has no impact here.
 const typoFoundations = raw['typography.foundations'] || {};
 const typoScale = raw['typography.scale.base'] || {};
 const fontFamily = typoFoundations.fontFamily || {};

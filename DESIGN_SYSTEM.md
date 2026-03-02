@@ -43,11 +43,11 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 
 - **Canonical type scale** — `typography.scale.base.fontSize` uses **type-1…type-9** (0.563rem … 5.61rem). Same rule as other scales: **0 only when value is 0**; type sizes start at 1.
 - **Typography scale web desktop** — `typography.scale.web.desktop` holds **t-shirt names** (xxs, xs, sm, …) as **refs** to base `type-1`…`type-9`, same pattern as `foundations.scale.web.desktop`. Use in Figma for desktop type scale; values resolve from base so they can’t drift.
-- **Figma rendering snapshots** — `typography.snapshot.web.desktop` **links to** `typography.scale.web.desktop` (snapshot.xxs → `{typography.scale.web.desktop.fontSize.xxs}` → base type-1). Tablet/mobile snapshots get scaled values (~0.9×, ~0.8×) from base. iOS snapshots are left untouched. Edit only the base scale; re-run the build to sync.
+- **Figma rendering snapshots** — Where applicable, snapshots **map back to the numeric primitive scale** (type-1…type-9). `typography.snapshot.web.desktop` uses refs like `{fontSize.type-1}`…`{fontSize.type-9}` (xxs→type-1 … 4xl→type-9) so the chain stays single-source. Tablet/mobile snapshots keep **computed** values (~0.9×, ~0.8× base) since they don’t match a single primitive. iOS snapshots are left untouched. Edit only the base scale; re-run the build to sync.
 
 **Fluid scale for code (`clamp()`)**
 
-- `typography.scale.fluid.fontSize.*` (t-shirt keys) is **derived**: `min` ≈ mobile snapshot, `max` = base size. Build script writes these from base type-1…type-9 and the same scale factors.
+- `typography.scale.fluid.fontSize.*` (t-shirt keys): **max** maps back to the primitive scale (`{fontSize.type-1}`…`{fontSize.type-9}`); **min** stays computed (mobile-scale rem). Build script writes min from base and writes max as refs so fluid stays single-source.
 - Code can map to `clamp(minRem, preferred, maxRem)` using `foundations.breakpoints`.
 
 **Rules (flow of truth):**
