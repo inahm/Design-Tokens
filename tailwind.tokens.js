@@ -67,7 +67,8 @@ module.exports = {
     "accessible-link": "#2563EB",
     "accessible-linkHover": "#1D4ED8",
     "accessible-linkVisited": "#1E40AF",
-    "accessible-focusRing": "#3B82F6"
+    "accessible-focusRing": "#3B82F6",
+    "borderListSeparator": "#E2E8F0"
   },
   "borderRadius": {
     "xs": "0.25rem",
@@ -90,7 +91,13 @@ module.exports = {
     "xs": "0px 1px 2px 0px rgba(10,13,18,0.06)",
     "sm": "0px 2px 4px -1px rgba(10,13,18,0.1)",
     "md": "0px 8px 16px -2px rgba(10,13,18,0.16)",
-    "lg": "0px 16px 32px -4px rgba(10,13,18,0.2)"
+    "lg": "0px 16px 32px -4px rgba(10,13,18,0.2)",
+    "card": "0px 2px 4px -1px rgba(10,13,18,0.1)",
+    "tile": "0px 2px 4px -1px rgba(10,13,18,0.1)",
+    "dropdown": "0px 8px 16px -2px rgba(10,13,18,0.16)",
+    "popover": "0px 8px 16px -2px rgba(10,13,18,0.16)",
+    "modal": "0px 16px 32px -4px rgba(10,13,18,0.2)",
+    "toast": "0px 16px 32px -4px rgba(10,13,18,0.2)"
   },
   "zIndex": {
     "base": "0",
@@ -99,7 +106,12 @@ module.exports = {
     "layer3": "1400",
     "layer4": "1500",
     "layer5": "1700",
-    "max": "2147483647"
+    "max": "2147483647",
+    "dropdown": "1000",
+    "sticky": "1100",
+    "modal": "1400",
+    "popover": "1500",
+    "toast": "1700"
   },
   "screens": {
     "xs": "392px",
@@ -230,7 +242,30 @@ module.exports = {
     "2xl": "3rem",
     "3xl": "4rem",
     "4xl": "6rem",
-    "5xl": "8rem"
+    "5xl": "8rem",
+    "gap-none": "0rem",
+    "gap-tightest": "{spacing.xs}",
+    "gap-tight": "{spacing.sm}",
+    "gap-comfortable": "{spacing.md}",
+    "gap-wide": "{spacing.lg}",
+    "gap-widest": "{spacing.xl}",
+    "padding-none": "0rem",
+    "padding-tightest": "{spacing.xs}",
+    "padding-tight": "{spacing.sm}",
+    "padding-comfortable": "{spacing.md}",
+    "padding-wide": "{spacing.lg}",
+    "padding-widest": "{spacing.xl}",
+    "padding-chip": "{spacing.xs}",
+    "padding-button": "{spacing.sm}",
+    "padding-card": "{spacing.md}",
+    "padding-page": "{spacing.5xl}",
+    "margin-none": "0rem",
+    "margin-tightest": "{spacing.xs}",
+    "margin-tight": "{spacing.sm}",
+    "margin-comfortable": "{spacing.md}",
+    "margin-wide": "{spacing.lg}",
+    "margin-widest": "{spacing.xl}",
+    "margin-page": "{spacing.5xl}"
   },
   "maxWidth": {
     "container-xs": "392px",
@@ -253,6 +288,12 @@ module.exports = {
       "lg": "24px",
       "xl": "32px"
     }
+  },
+  "ringWidth": {
+    "focus": "2px"
+  },
+  "ringColor": {
+    "focus": "#3B82F6"
   }
 }
   }

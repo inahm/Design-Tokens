@@ -390,7 +390,7 @@ for (const [k, v] of Object.entries(scaleBaseIconSize)) {
 }
 
 // Web semantics: layout (gap, padding, margin) -> spacing
-const semanticsLayout = (raw.web && raw.web.layout) || {};
+const semanticsLayout = (raw['semantics.web'] && raw['semantics.web'].layout) || {};
 for (const group of ['gap', 'padding', 'margin']) {
   const obj = semanticsLayout[group] || {};
   for (const [k, v] of Object.entries(obj)) {
@@ -402,7 +402,7 @@ for (const group of ['gap', 'padding', 'margin']) {
 }
 
 // Web semantics: focus ring -> ringWidth, ringColor
-const focusRing = raw.web?.border?.focus?.ring?.accessible?.value;
+const focusRing = raw['semantics.web']?.border?.focus?.ring?.accessible?.value;
 if (focusRing && typeof focusRing === 'object') {
   if (focusRing.color) {
     const c = resolveVal(focusRing.color);
@@ -415,7 +415,7 @@ if (focusRing && typeof focusRing === 'object') {
 }
 
 // Web semantics: elevation -> boxShadow aliases (e.g. elevation.card -> shadow.sm)
-const semanticsElevation = (raw.web && raw.web.elevation) || {};
+const semanticsElevation = (raw['semantics.web'] && raw['semantics.web'].elevation) || {};
 for (const [k, v] of Object.entries(semanticsElevation)) {
   if (v && v.value && typeof v.value === 'string') {
     const refPath = v.value.slice(1, -1).trim(); // "shadow.sm" -> last part "sm"
@@ -425,7 +425,7 @@ for (const [k, v] of Object.entries(semanticsElevation)) {
 }
 
 // Web semantics: z-index aliases
-const semanticsZIndex = (raw.web && raw.web['z-index']) || {};
+const semanticsZIndex = (raw['semantics.web'] && raw['semantics.web']['z-index']) || {};
 for (const [k, v] of Object.entries(semanticsZIndex)) {
   if (v && v.value !== undefined) {
     const resolved = resolveVal(v.value);
@@ -433,8 +433,8 @@ for (const [k, v] of Object.entries(semanticsZIndex)) {
   }
 }
 
-// Web semantics: border.listSeparator (color for list/table dividers)
-const listSeparator = raw.web?.border?.listSeparator;
+// Border listSeparator color from color.semantic (border color lives in color semantics, not semantics.web)
+const listSeparator = raw['color.semantic.light']?.border?.listSeparator;
 if (listSeparator && listSeparator.value) {
   const resolved = resolveVal(listSeparator.value);
   if (typeof resolved === 'string') theme.colors.borderListSeparator = resolved;
