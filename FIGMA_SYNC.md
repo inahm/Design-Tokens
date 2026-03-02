@@ -1,0 +1,36 @@
+# Figma / Tokens Studio — sync checklist
+
+The repo is correct: **display font = DM Sans** in `tokens.json` → `typography.foundations.fontFamily.display`.
+
+If Tokens Studio still shows "Google Sans" or variables don’t update in Figma, the plugin is not using this file. Use one of the options below, then run **Export to Figma** again.
+
+---
+
+## Option A: Token source = GitHub URL
+
+1. In Tokens Studio, set the token source to this **raw file URL** (main branch):
+   ```
+   https://raw.githubusercontent.com/inahm/Design-Tokens/main/tokens.json
+   ```
+2. Click **Sync** / **Refresh** / **Pull** (whatever the plugin calls it) so it re-fetches the file.
+3. Confirm **typography.foundations** → **display** shows **DM Sans**.
+4. Run **Export → Export to Figma** (or “Export to native variables”).
+
+---
+
+## Option B: Token source = local file
+
+1. In Tokens Studio, set the token source to a **local file**.
+2. Choose the `tokens.json` inside your Design-Tokens repo (e.g. `…/Design-Tokens/tokens.json`).  
+   If you’re not sure, in Terminal run: `cd` into the repo and run `pwd` — the path is `{that path}/tokens.json`.
+3. **Re-import** or **re-open** the file in the plugin (or remove the source and add it again) so it’s not using a cached copy.
+4. Confirm **display** = **DM Sans**, then **Export to Figma**.
+
+---
+
+## Still showing old values?
+
+- Make sure you’re looking at the **token source** (the file), not the “Figma variables” view. The source should show DM Sans before export.
+- If you use a **branch** other than `main`, replace `main` in the URL with your branch name.
+- After export, add **DM Sans** to the Figma file (use it in a text layer once) so variables can apply it.
+- **Variables not updating in Figma?** Sometimes the existing variable collection keeps old values. Try **deleting the variable collection in Figma** and re-exporting from Tokens Studio (Export to Figma) so it creates a fresh collection with the latest tokens. Re-apply variables to components if they were bound to the old collection.
