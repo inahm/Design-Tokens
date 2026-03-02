@@ -1,6 +1,6 @@
 # iOS typography scale (Figma + SwiftUI)
 
-Use **typography.scale.ios** (iPhone) or **typography.scale.ios.tablet** (iPad) in Token Studio when designing for iOS so type sizes in Figma match what ships in the app (pt-based). Same pattern as web: one scale per context.
+Use **typography.snapshot.ios.phone** (iPhone) or **typography.snapshot.ios.tablet** (iPad) in Token Studio when designing for iOS so type sizes in Figma match what ships in the app (pt-based). Same pattern as web snapshots: one set per context.
 
 ---
 
@@ -13,7 +13,7 @@ Use **typography.scale.ios** (iPhone) or **typography.scale.ios.tablet** (iPad) 
 
 ---
 
-## iPhone (typography.scale.ios)
+## iPhone (typography.snapshot.ios.phone)
 
 | Token       | Value (pt) |
 |------------|------------|
@@ -29,7 +29,7 @@ Use **typography.scale.ios** (iPhone) or **typography.scale.ios.tablet** (iPad) 
 
 ---
 
-## iPad (typography.scale.ios.tablet)
+## iPad (typography.snapshot.ios.tablet)
 
 | Token       | Value (pt) |
 |------------|------------|

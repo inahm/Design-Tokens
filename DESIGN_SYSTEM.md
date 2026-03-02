@@ -28,21 +28,20 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
   - `foundations.scale.web.base.*` — web desktop / large viewport baseline.
   - `foundations.scale.web.mobile.*` / `.web.tablet.*` — web layout scales for small / medium viewports.
   - `foundations.scale.ios.mobile.*` / `.ios.tablet.*` — iOS-specific layout scales for iPhone / iPad (containers, line lengths, media sizes, spacing, icon sizes). Use these when designing **native** iOS layouts so you can tune spacing separately from web while keeping the same semantic naming.
-- **typography (canonical)** — `typography.foundations` (font families, weights), `typography.scale.base` / `.mobile` / `.tablet` (sizes in rem), `typography.scale.fluid` (min/max for clamp), **`typography.scale.ios`** (iPhone, pt), **`typography.scale.ios.tablet`** (iPad, pt). Enable with **ios** set in Token Studio for pixel-perfect Figma; use `.ios` for iPhone frames, `.ios.tablet` for iPad. Web semantics under `web.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
+- **typography (canonical)** — `typography.foundations` (font families, weights), `typography.scale.base` (sizes in rem for desktop reference), and `typography.scale.fluid` (min/max for clamp). Enable with **ios** set in Token Studio for pixel-perfect Figma; use `.ios` for iPhone frames, `.ios.tablet` for iPad. Web semantics under `web.typography.*`: role-based names only (e.g. `heading.page`, `body.long`, `label.button`, `meta.caption`). Generic names (heading-1, body, caption) are **not** stored in the token source to avoid bloat and broken refs in token UIs; the mapping below is for adapters to use at export time.
 
 ### Typography snapshots vs canonical
 
-- **Canonical scale** — `typography.scale.base` (desktop reference), plus `.mobile`, `.tablet`, `.ios`, `.ios.tablet`:
-  - Defines the **true type system**: hierarchy, ratios, and intended emphasis.
-  - Is the authority for both CSS (e.g. clamp() generation) and iOS (Swift/SwiftUI role mapping).
+- **Canonical scale** — `typography.scale.base` (desktop reference) and `typography.scale.fluid`:
+  - Define the **true type system**: hierarchy, ratios, and intended emphasis for code and Swift/SwiftUI.
 - **Figma rendering snapshots** — `typography.snapshot.*`:
   - Web snapshots:
     - `typography.snapshot.web.mobile`
     - `typography.snapshot.web.tablet`
     - `typography.snapshot.web.desktop` (numerically 1:1 with canonical desktop)
   - iOS snapshots:
-    - `typography.snapshot.ios.phone`
-    - `typography.snapshot.ios.tablet`
+    - `typography.snapshot.ios.phone` (iPhone, pt)
+    - `typography.snapshot.ios.tablet` (iPad, pt)
   - Exist **only** so Figma layouts render pixel-accurate values (Figma can’t render `clamp()`).
   - Are **derived from canonical scale** and must never be edited directly; treat them as evaluated outputs at specific contexts.
 
@@ -50,7 +49,7 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 
 - Canonical tokens flow **one-way → snapshots**.
 - Never design against canonical tokens in Figma; use the appropriate `typography.snapshot.*` set for the frame’s platform + viewport.
-- Never ship snapshot tokens to production code; exports and adapters should read from `typography.scale.*` and `web.typography.*` / `ios.typography.*` instead.
+- Never ship snapshot tokens to production code; exports and adapters should read from `typography.scale.base` / `typography.scale.fluid` and `web.typography.*` / `ios.typography.*` instead.
 - If values drift, update canonical first, then regenerate or re-alias the snapshots.
 
 **Generic typography mapping (for adapters only)** — Use when a tool expects “Heading 1” / “Body” / “Caption”:
@@ -67,7 +66,7 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 
 - **color semantics** — `color.semantic.light.*` / `color.semantic.dark.*` (background, surface, text, border, etc.), including `color.semantic.[light|dark].border.listSeparator` for list/table row dividers. Use in Figma for separator strokes (and optionally via `web.border.listSeparator` alias on web).
 - **ios** — **Separate token set** (Token Studio: turn on for iOS, off for web). `ios.interactive.minimumTouchTarget` (44pt), `ios.inset.safeArea.top/bottom/left/right` (pt). Use in Figma for iOS frames; disable the **ios** set when designing web-only.
-- **typography.scale.ios** — **Separate token set** (Token Studio: enable with **ios** for iPhone). `fontSize.*` in pt (11–34). **typography.scale.ios.tablet** — same structure for iPad (pt 12–40); enable instead of or after `.ios` when designing iPad frames. See [IOS_TYPESTYLES.md](IOS_TYPESTYLES.md).
+- **typography.snapshot.ios.phone / .ios.tablet** — **Separate token sets** (Token Studio: enable with **ios** for iPhone/iPad). `fontSize.*` in pt (11–40). See [IOS_TYPESTYLES.md](IOS_TYPESTYLES.md).
 - **$themes** — Figma-oriented mapping of token sets to modes/collections.
 
 Adding a new adapter: read this structure (and resolve references `{path.to.token}`), then write the target format. Prefer reusing the resolution logic in `build-tailwind-tokens.js` if the new format needs the same behavior.
