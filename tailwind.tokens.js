@@ -67,7 +67,8 @@ module.exports = {
     "accessible-link": "#2563EB",
     "accessible-linkHover": "#1D4ED8",
     "accessible-linkVisited": "#1E40AF",
-    "accessible-focusRing": "#3B82F6"
+    "accessible-focusRing": "#3B82F6",
+    "borderListSeparator": "#E2E8F0"
   },
   "borderRadius": {
     "xs": "0.25rem",
@@ -263,7 +264,11 @@ module.exports = {
     "margin-comfortable": "1rem",
     "margin-wide": "1.5rem",
     "margin-widest": "2rem",
-    "margin-page": "5rem"
+    "margin-page": "5rem",
+    "iosSafeAreaTop": "59px",
+    "iosSafeAreaBottom": "34px",
+    "iosSafeAreaLeft": "0px",
+    "iosSafeAreaRight": "0px"
   },
   "maxWidth": {
     "container-xs": "392px",
@@ -292,6 +297,9 @@ module.exports = {
   },
   "ringColor": {
     "focus": "#3B82F6"
+  },
+  "minWidth": {
+    "iosTouchTarget": "44px"
   }
 }
   }

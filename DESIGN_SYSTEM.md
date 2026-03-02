@@ -40,6 +40,8 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 | Caption bold  | `semantics.typography.meta.helper` |
 
 - **color semantics** — `color.semantic.light.*` / `color.semantic.dark.*` (background, surface, text, border, etc.).
+- **semantics.border.listSeparator** — Color for list/table row dividers. Use in Figma for separator strokes.
+- **ios** — **Separate token set** (Token Studio: turn on for iOS, off for web). `ios.interactive.minimumTouchTarget` (44pt), `ios.inset.safeArea.top/bottom/left/right` (pt). Use in Figma for iOS frames; disable the **ios** set when designing web-only.
 - **$themes** — Figma-oriented mapping of token sets to modes/collections.
 
 Adding a new adapter: read this structure (and resolve references `{path.to.token}`), then write the target format. Prefer reusing the resolution logic in `build-tailwind-tokens.js` if the new format needs the same behavior.

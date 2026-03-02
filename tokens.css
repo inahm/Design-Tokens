@@ -65,6 +65,7 @@
   --color-accessible-link-hover: #1D4ED8;
   --color-accessible-link-visited: #1E40AF;
   --color-accessible-focus-ring: #3B82F6;
+  --color-border-list-separator: #E2E8F0;
   --radius-xs: 0.25rem;
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
@@ -152,6 +153,10 @@
   --spacing-margin-wide: 1.5rem;
   --spacing-margin-widest: 2rem;
   --spacing-margin-page: 5rem;
+  --spacing-ios-safe-area-top: 59px;
+  --spacing-ios-safe-area-bottom: 34px;
+  --spacing-ios-safe-area-left: 0px;
+  --spacing-ios-safe-area-right: 0px;
   --font-family-body: Inter, sans-serif;
   --font-family-display: "DM Sans", sans-serif;
   --font-weight-regular: 400;
@@ -194,6 +199,7 @@
   --width-icon-md: 20px;
   --width-icon-lg: 24px;
   --width-icon-xl: 32px;
+  --min-width-ios-touch-target: 44px;
   --ring-width-focus: 2px;
   --ring-color-focus: #3B82F6;
 }

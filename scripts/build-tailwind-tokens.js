@@ -17,7 +17,7 @@ const raw = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
 // Flatten token tree to path -> value (primitives + refs)
 const primitives = {};
 const refs = {};
-const PREFIXES = ['', 'foundations.scale.base.', 'foundations.', 'typography.foundations.', 'typography.scale.base.', 'semantics.'];
+const PREFIXES = ['', 'foundations.scale.base.', 'foundations.', 'typography.foundations.', 'typography.scale.base.', 'semantics.', 'ios.'];
 
 function walk(obj, prefix = '') {
   if (!obj || typeof obj !== 'object') return;
@@ -331,6 +331,35 @@ for (const [k, v] of Object.entries(semanticsZIndex)) {
   }
 }
 
+// Semantics: border.listSeparator (color for list/table dividers)
+const listSeparator = raw.semantics?.border?.listSeparator;
+if (listSeparator && listSeparator.value) {
+  const resolved = resolveVal(listSeparator.value);
+  if (typeof resolved === 'string') theme.colors.borderListSeparator = resolved;
+}
+
+// iOS token set (separate set so Token Studio can enable/disable for iOS vs web)
+const semanticsIos = raw.ios || {};
+const iosInteractive = semanticsIos.interactive || {};
+const iosInset = semanticsIos.inset?.safeArea || {};
+if (iosInteractive.minimumTouchTarget && iosInteractive.minimumTouchTarget.value) {
+  const v = resolveVal(iosInteractive.minimumTouchTarget.value);
+  if (v !== undefined) {
+    theme.minWidth = theme.minWidth || {};
+    theme.minWidth.iosTouchTarget = `${v}px`;
+  }
+}
+for (const edge of ['top', 'bottom', 'left', 'right']) {
+  const node = iosInset[edge];
+  if (node && node.value !== undefined) {
+    const v = resolveVal(node.value);
+    if (v !== undefined) {
+      const px = typeof v === 'string' ? `${v}px` : `${v}px`;
+      theme.spacing[`iosSafeArea${edge.charAt(0).toUpperCase() + edge.slice(1)}`] = px;
+    }
+  }
+}
+
 // Remove empty sections
 for (const key of Object.keys(theme)) {
   if (Object.keys(theme[key]).length === 0) delete theme[key];
@@ -454,6 +483,11 @@ if (theme.width && theme.width.icon) {
   for (const [key, value] of Object.entries(theme.width.icon)) {
     cssVars.push(`  ${toCssVar(`width-icon-${key}`)}: ${value};`);
   }
+}
+
+// Min width (e.g. iOS touch target)
+for (const [key, value] of Object.entries(theme.minWidth || {})) {
+  cssVars.push(`  ${toCssVar(`min-width-${key}`)}: ${value};`);
 }
 
 // Ring (focus)
