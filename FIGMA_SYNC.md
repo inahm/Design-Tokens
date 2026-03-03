@@ -55,8 +55,11 @@ Use the **surface.glass** scale (navBar / sheet / overlay) for fill, stroke, blu
 
 - **Fill** → `surface.glass.background.navBar` (or `.sheet`, `.overlay`)
 - **Stroke** → `surface.glass.stroke.navBar` (or `.sheet`, `.overlay`)
+- **Stroke highlight** → `surface.glass.strokeHighlight.navBar` (or `.sheet`, `.overlay`) — use for a nuanced glass edge (see below).
 - **Blur** → `surface.glass.blur.navBar` (or `.sheet`, `.overlay`)
 - **Shadow** → `surface.glass.shadow.navBar` (or `.sheet`, `.overlay`)
+
+**Nuanced stroke (true glass edge):** For a more realistic glass border, use both stroke tokens. Apply **stroke** as the main border, then add a second stroke (or inner path) with **strokeHighlight** — typically thinner and on the top/left where light would catch the edge. Alternatively use a gradient stroke from `strokeHighlight` to `stroke` (e.g. light top-left to slightly darker bottom-right).
 
 **Important:** Tokens Studio applies the blur token as **Layer blur** in Figma. For a real glass look (blur what’s behind the layer), after applying the blur token:
 
