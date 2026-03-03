@@ -39,6 +39,16 @@ If Tokens Studio still shows "Google Sans" or variables don’t update in Figma,
 
 ---
 
+## Getting blur tokens into Figma
+
+Blur tokens use **dimension** type so they export as **Number** variables. When exporting to Figma:
+
+1. In **Export to Figma**, enable **Number** (Variables). That’s what exports dimension/blur tokens.
+2. Ensure the token set that contains your blur tokens (e.g. **Composition PRO**) is selected for export.
+3. After export, in Figma the blur values live in the **Variables** panel as numbers (e.g. 16, 24, 32). To bind to **Background blur** → Blur: click the grid icon next to the blur value and pick the variable (you may need to search by scale name like **navBar**, **sheet**, or **overlay** rather than “blur”, depending on how the collection is named).
+
+---
+
 ## Glass effects
 
 Use the **surface.glass** scale (navBar / sheet / overlay) for fill, stroke, blur, and shadow:
