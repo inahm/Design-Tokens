@@ -36,3 +36,22 @@ If Tokens Studio still shows "Google Sans" or variables don’t update in Figma,
 - If you use a **branch** other than `main`, replace `main` in the URL with your branch name.
 - After export, add **DM Sans** to the Figma file (use it in a text layer once) so variables can apply it.
 - **Variables not updating in Figma?** Sometimes the existing variable collection keeps old values. Try **deleting the variable collection in Figma** and re-exporting from Tokens Studio (Export to Figma) so it creates a fresh collection with the latest tokens. Re-apply variables to components if they were bound to the old collection.
+
+---
+
+## Glass effects
+
+Use the **surface.glass** scale (navBar / sheet / overlay) for fill, stroke, blur, and shadow:
+
+- **Fill** → `surface.glass.background.navBar` (or `.sheet`, `.overlay`)
+- **Stroke** → `surface.glass.stroke.navBar` (or `.sheet`, `.overlay`)
+- **Blur** → `surface.glass.blur.navBar` (or `.sheet`, `.overlay`)
+- **Shadow** → `surface.glass.shadow.navBar` (or `.sheet`, `.overlay`)
+
+**Important:** Tokens Studio applies the blur token as **Layer blur** in Figma. For a real glass look (blur what’s behind the layer), after applying the blur token:
+
+1. Select the layer (frame/rectangle).
+2. In the right panel, open **Effects**.
+3. Change the blur effect from **Layer blur** to **Background blur**.
+
+The token’s value (e.g. 16px) still applies; you’re only changing the effect type. Do this once per glass layer (or use a component that already has Background blur set).
