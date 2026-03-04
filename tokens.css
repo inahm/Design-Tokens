@@ -65,7 +65,6 @@
   --color-accessible-link-hover: #1D4ED8;
   --color-accessible-link-visited: #1E40AF;
   --color-accessible-focus-ring: #3B82F6;
-  --color-border-list-separator: #E2E8F0;
   --radius-xs: 0.25rem;
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
@@ -96,6 +95,7 @@
   --z-layer4: 1500;
   --z-layer5: 1700;
   --z-max: 2147483647;
+  --z-overlay: 1100;
   --z-dropdown: 1000;
   --z-sticky: 1100;
   --z-modal: 1400;
@@ -144,7 +144,8 @@
   --spacing-padding-wide: {spacing.lg};
   --spacing-padding-widest: {spacing.xl};
   --spacing-padding-chip: {spacing.xs};
-  --spacing-padding-button: {spacing.sm};
+  --spacing-padding-button-top-bottom: {spacing.sm};
+  --spacing-padding-button-left-right: {spacing.lg};
   --spacing-padding-card: {spacing.md};
   --spacing-padding-page: {spacing.5xl};
   --spacing-margin-none: 0rem;

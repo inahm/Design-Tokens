@@ -67,8 +67,7 @@ module.exports = {
     "accessible-link": "#2563EB",
     "accessible-linkHover": "#1D4ED8",
     "accessible-linkVisited": "#1E40AF",
-    "accessible-focusRing": "#3B82F6",
-    "borderListSeparator": "#E2E8F0"
+    "accessible-focusRing": "#3B82F6"
   },
   "borderRadius": {
     "xs": "0.25rem",
@@ -107,6 +106,7 @@ module.exports = {
     "layer4": "1500",
     "layer5": "1700",
     "max": "2147483647",
+    "overlay": "1100",
     "dropdown": "1000",
     "sticky": "1100",
     "modal": "1400",
@@ -256,7 +256,8 @@ module.exports = {
     "padding-wide": "{spacing.lg}",
     "padding-widest": "{spacing.xl}",
     "padding-chip": "{spacing.xs}",
-    "padding-button": "{spacing.sm}",
+    "padding-buttonTopBottom": "{spacing.sm}",
+    "padding-buttonLeftRight": "{spacing.lg}",
     "padding-card": "{spacing.md}",
     "padding-page": "{spacing.5xl}",
     "margin-none": "0rem",
