@@ -43,4 +43,4 @@ Use **typography.snapshot.ios.phone** (iPhone) or **typography.snapshot.ios.tabl
 | fontSize.3xl | 32 |
 | fontSize.4xl | 40 |
 
-Semantics unchanged: same token names (e.g. `heading.page` → 3xl, `body.long` → md); only the resolved pt value changes by scale. Font family and weight from **typography.foundations** (Inter, DM Sans).
+Semantics unchanged: same token names (e.g. `heading.page` → 3xl, `body.long` → md); only the resolved pt value changes by scale. Font family and weight from **primitives/foundations.typography** (Inter, DM Sans).

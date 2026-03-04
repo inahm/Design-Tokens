@@ -29,7 +29,7 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 - **typographyScale/** — `base`, then `web.fluid`, `web.snapshot.desktop`, `web.snapshot.mobile`, `web.snapshot.tablet`, `ios.snapshot.phone`, `ios.snapshot.tablet`.
 - **semantics/** — `web`, `ios`.
 - **colorSemantics/** — `web.light`, `web.dark`, `ios.light`, `ios.dark`.
-- **primitives/** — Category-based (not platform): `foundations`, `typography.foundations`.
+- **primitives/** — Category-based (not platform): `foundations`, `foundations.typography`.
 
 - **foundations** — Primitives: `foundations.color.*`, `foundations.radius.*`, `foundations.shadow.*`, `foundations.breakpoints.*`, etc. Raw values and layout/spacing scales. Token set: **primitives/foundations**. Layout scale sets under **layoutScale/**:
   - **layoutScale/base** — canonical desktop baseline. **Primitive naming**: prefix + number; **use 0 only when the value is 0**. Spacing: `space-0`…`space-10` (space-0 = 0, then 0.25rem…8rem). Container/lineLength/media/iconSize have no zero value, so they start at 1: `container-1`…`container-6`, `lineLength-1`…`lineLength-3`, `media-1`…`media-3`, `iconSize-1`…`iconSize-4`. Viewport sets use t-shirt/semantic names and reference these primitives.
@@ -44,7 +44,7 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 - **Web desktop** — **layoutScale/web.desktop** is reference-only; every value points at base via **short refs** (e.g. `{spacing.space-1}`, `{layout.container.container-1}`, `{media.media-1}`, `{iconSize.iconSize-1}`) so Tokens Studio can accept them. Resolve via **layoutScale/base.** prefix. Exports and Tailwind read base and output t-shirt names.
 - **Web mobile / tablet** — Spacing is scaled down from base (mobile ~0.75×, tablet between mobile and base). Layout (containers, line length, media, icon size) is tuned per viewport; spacing ladder keeps the same keys so semantics stay consistent.
 - **iOS scales** — Same structure as web (layout, media, iconSize, spacing), with values tuned for native. Spacing is also monotonic per scale.
-- **typography (canonical)** — **primitives/typography.foundations** (font families, weights), **typographyScale/base** (type scale in rem), and **typographyScale/web.fluid** (min/max for clamp). Base uses the same **prefix + number** convention: `fontSize.type-1`…`type-9` (no type-0; no zero size). Build script maps type-1…type-9 → xxs…4xl for Tailwind; snapshots use t-shirt names and ref or derive from base. Web semantics under `web.typography.*`; generic names (heading-1, body, caption) are adapter-only.
+- **typography (canonical)** — **primitives/foundations.typography** (font families, weights), **typographyScale/base** (type scale in rem), and **typographyScale/web.fluid** (min/max for clamp). Base uses the same **prefix + number** convention: `fontSize.type-1`…`type-9` (no type-0; no zero size). Build script maps type-1…type-9 → xxs…4xl for Tailwind; snapshots use t-shirt names and ref or derive from base. Web semantics under `web.typography.*`; generic names (heading-1, body, caption) are adapter-only.
 
 ### Typography snapshots, fluid scale, and canonical
 

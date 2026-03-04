@@ -9,7 +9,7 @@ This repo’s `tokens.json` defines a **responsive, theme‑able design system**
   - **`foundations.scale.base`**: canonical desktop layout scale – container widths, line length, icon sizes, media sizes, and spacing in `rem`.
   - **`foundations.scale.web.mobile` / `foundations.scale.web.tablet`**: responsive web layout/spacing scales for mobile and tablet, derived from the base scale.
 - **Typography scales**
-  - **`typography.foundations`**: font families and weights shared across breakpoints.
+  - **`foundations.typography`** (under primitives): font families and weights shared across breakpoints.
   - **`typography.scale.base`**: canonical desktop type scale (`fontSize.type-1`…`type-9` in `rem`; build maps to `xxs`…`4xl`).
   - **`typography.scale.fluid`**: min/max `rem` for each size step to drive `clamp()` in code, **derived from base + mobile snapshots** by `build-tailwind-tokens.js`:
     - `min` ≈ `typography.snapshot.web.mobile.fontSize.*`

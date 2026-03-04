@@ -91,7 +91,7 @@ fs.writeFileSync(tokensPath, JSON.stringify(raw, null, 2) + '\n', 'utf8');
 // Flatten token tree to path -> value (primitives + refs)
 const primitives = {};
 const refs = {};
-const PREFIXES = ['', 'primitives/foundations.', 'layoutScale/base.', 'primitives/typography.foundations.', 'typographyScale/base.', 'typographyScale/web.snapshot.desktop.', 'typographyScale/web.fluid.', 'semantics/web.', 'semantics/ios.'];
+const PREFIXES = ['', 'primitives/foundations.', 'layoutScale/base.', 'primitives/foundations.typography.', 'typographyScale/base.', 'typographyScale/web.snapshot.desktop.', 'typographyScale/web.fluid.', 'semantics/web.', 'semantics/ios.'];
 
 function walk(obj, prefix = '') {
   if (!obj || typeof obj !== 'object') return;
@@ -298,9 +298,9 @@ for (const [k, v] of Object.entries(spacingObj)) {
   }
 }
 
-// Typography from typography.foundations and typographyScale/base (type-1…type-9 → t-shirt for Tailwind).
+// Typography from primitives/foundations.typography and typographyScale/base (type-1…type-9 → t-shirt for Tailwind).
 // Snapshot/fluid use refs to type-N for Figma; Tailwind and CSS read base only, so map-back has no impact here.
-const typoFoundations = raw['primitives/typography.foundations'] || {};
+const typoFoundations = raw['primitives/foundations.typography'] || {};
 const typoScale = raw['typographyScale/base'] || {};
 const fontFamily = typoFoundations.fontFamily || {};
 for (const [k, v] of Object.entries(fontFamily)) {

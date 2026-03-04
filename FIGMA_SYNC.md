@@ -1,6 +1,6 @@
 # Figma / Tokens Studio — sync checklist
 
-The repo is correct: **display font = DM Sans** in `tokens.json` → `typography.foundations.fontFamily.display`.
+The repo is correct: **display font = DM Sans** in `tokens.json` → **primitives/foundations.typography** → `fontFamily.display`.
 
 **Reference paths:** Tokens Studio often can’t accept or display the full token path when linking (e.g. `typography.scale.base.fontSize.type-1`). The token source uses **short paths** for refs (e.g. `{fontSize.type-1}`, `{fontSize.xxs}`) so the plugin can resolve them when the right sets are enabled. Don’t change these to long paths in the JSON.
 
@@ -15,7 +15,7 @@ If Tokens Studio still shows "Google Sans" or variables don’t update in Figma,
    https://raw.githubusercontent.com/inahm/Design-Tokens/main/tokens.json
    ```
 2. Click **Sync** / **Refresh** / **Pull** (whatever the plugin calls it) so it re-fetches the file.
-3. Confirm **typography.foundations** → **display** shows **DM Sans**.
+3. Confirm **primitives/foundations.typography** → **display** shows **DM Sans**.
 4. Run **Export → Export to Figma** (or “Export to native variables”).
 
 ---
