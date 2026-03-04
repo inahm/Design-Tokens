@@ -63,15 +63,15 @@ In Tokens Studio, enable the **semantics/ios** set (or the set where these live)
 
 ## Glass effects
 
-Glass semantics live in **iOS** (colorSemantics/ios.light and colorSemantics/ios.dark), not web. Use the **surface.glass** scale (navBar / sheet / overlay) for fill, stroke, blur, and shadow:
+Glass semantics live in **iOS** (colorSemantics/ios.light and colorSemantics/ios.dark), not web. One glass treatment with five tokens:
 
-- **Fill** → `surface.glass.background.navBar` (or `.sheet`, `.overlay`)
-- **Stroke** → `surface.glass.stroke.navBar` (or `.sheet`, `.overlay`)
-- **Stroke highlight** → `surface.glass.strokeHighlight.navBar` (or `.sheet`, `.overlay`) — use for a nuanced glass edge (see below).
-- **Blur** → `surface.glass.blur.navBar` (or `.sheet`, `.overlay`)
-- **Shadow** → `surface.glass.shadow.navBar` (or `.sheet`, `.overlay`)
+- **Fill** → `surface.glass.background`
+- **Stroke** → `surface.glass.stroke`
+- **Highlight** → `surface.glass.highlight` — lighter edge for top/left (optional second stroke)
+- **Blur** → `surface.glass.blur`
+- **Shadow** → `surface.glass.shadow`
 
-**Nuanced stroke (true glass edge):** For a more realistic glass border, use both stroke tokens. Apply **stroke** as the main border, then add a second stroke (or inner path) with **strokeHighlight** — typically thinner and on the top/left where light would catch the edge. Alternatively use a gradient stroke from `strokeHighlight` to `stroke` (e.g. light top-left to slightly darker bottom-right).
+**Nuanced stroke (true glass edge):** Apply **stroke** as the main border, then add a second stroke (or inner path) with **highlight** — typically thinner and on the top/left where light would catch the edge.
 
 **Important:** Tokens Studio applies the blur token as **Layer blur** in Figma. For a real glass look (blur what’s behind the layer), after applying the blur token:
 
