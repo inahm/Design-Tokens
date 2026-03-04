@@ -53,7 +53,7 @@ Blur tokens use **dimension** type so they export as **Number** variables. When 
 
 The **effect.glass** composition token maps **backgroundBlur** and **boxShadow** together for one-click application or export to Figma Effect styles:
 
-- **effect.glass** — `backgroundBlur`: {blur.navBar}, `boxShadow`: {shadow.xs}
+- **effect.glass** — `backgroundBlur`: {blur.lg}, `boxShadow`: {shadow.xs}
 
 In Tokens Studio, enable the **semantics/ios** set, then use **Apply to selection** or **Export to Figma** (Effect styles) so the composition drives a single Effect style with both Background blur and Drop shadow.
 
@@ -69,7 +69,7 @@ In Tokens Studio, enable the **semantics/ios** set, then use **Apply to selectio
 
 **Blur and shadow** (glass effect) live in **semantics/ios** as a single composition, not as separate color tokens:
 
-- **One-click glass effect** → `effect.glass` (semantics/ios) — applies both backgroundBlur and boxShadow. For blur or shadow alone, use primitives `blur.navBar` and `shadow.xs`.
+- **One-click glass effect** → `effect.glass` (semantics/ios) — applies both backgroundBlur and boxShadow. For blur or shadow alone, use primitives `blur.lg` and `shadow.xs`.
 
 **Nuanced stroke (true glass edge):** Apply **stroke** as the main border, then add a second stroke (or inner path) with **highlight** — typically thinner and on the top/left where light would catch the edge.
 
