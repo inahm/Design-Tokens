@@ -51,13 +51,11 @@ Blur tokens use **dimension** type so they export as **Number** variables. When 
 
 ## Glass effect composition (blur + shadow in one token)
 
-The **effect.glass** tokens are composition tokens that map **backgroundBlur** and **boxShadow** together for one-click application or export to Figma Effect styles:
+The **effect.glass** composition token maps **backgroundBlur** and **boxShadow** together for one-click application or export to Figma Effect styles:
 
-- **effect.glass.navBar** — `backgroundBlur`: {blur.navBar}, `boxShadow`: {shadow.xs}
-- **effect.glass.sheet** — `backgroundBlur`: {blur.sheet}, `boxShadow`: {shadow.xs}
-- **effect.glass.overlay** — `backgroundBlur`: {blur.overlay}, `boxShadow`: {shadow.sm}
+- **effect.glass** — `backgroundBlur`: {blur.navBar}, `boxShadow`: {shadow.xs}
 
-In Tokens Studio, enable the **semantics/ios** set (or the set where these live), then use **Apply to selection** or **Export to Figma** (Effect styles) so these compositions drive a single Effect style with both Background blur and Drop shadow. If the plugin exports composition tokens as Effect styles, you get one style per scale (navBar / sheet / overlay) with both effects baked in.
+In Tokens Studio, enable the **semantics/ios** set, then use **Apply to selection** or **Export to Figma** (Effect styles) so the composition drives a single Effect style with both Background blur and Drop shadow.
 
 ---
 
