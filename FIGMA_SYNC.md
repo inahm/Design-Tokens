@@ -49,16 +49,6 @@ Blur tokens use **dimension** type so they export as **Number** variables. When 
 
 ---
 
-## Glass effect composition (blur + shadow in one token)
-
-The **effect.glass** composition token maps **backgroundBlur** and **boxShadow** together for one-click application or export to Figma Effect styles:
-
-- **effect.glass** — `backgroundBlur`: {blur.lg}, `boxShadow`: {shadow.xs}
-
-In Tokens Studio, enable the **semantics/ios** set, then use **Apply to selection** or **Export to Figma** (Effect styles) so the composition drives a single Effect style with both Background blur and Drop shadow.
-
----
-
 ## Glass effects
 
 **Color** (fill, stroke, highlight) live in **iOS color semantics** (colorSemantics/ios.light and colorSemantics/ios.dark):
@@ -67,9 +57,10 @@ In Tokens Studio, enable the **semantics/ios** set, then use **Apply to selectio
 - **Stroke** → `surface.glass.stroke`
 - **Highlight** → `surface.glass.highlight` — lighter edge for top/left (optional second stroke)
 
-**Blur and shadow** (glass effect) live in **semantics/ios** as a single composition, not as separate color tokens:
+**Blur and shadow** (glass) live in **semantics/ios** as separate tokens — apply each to the layer in Figma:
 
-- **One-click glass effect** → `effect.glass` (semantics/ios) — applies both backgroundBlur and boxShadow. For blur or shadow alone, use primitives `blur.lg` and `shadow.xs`.
+- **Blur** → `glass.blur` (semantics/ios) — references {blur.lg}. Apply to Background blur (or Layer blur) on the layer.
+- **Shadow** → `glass.shadow` (semantics/ios) — references {shadow.sm}. Apply to Drop shadow on the layer.
 
 **Nuanced stroke (true glass edge):** Apply **stroke** as the main border, then add a second stroke (or inner path) with **highlight** — typically thinner and on the top/left where light would catch the edge.
 
