@@ -25,16 +25,16 @@ function syncTypographySnapshotsWithBase(json) {
 
   const baseFontSizes = baseScale.fontSize;
 
-  if (!json['typographyScale/snapshot.web.desktop']) json['typographyScale/snapshot.web.desktop'] = {};
-  const desktopSnapshot = json['typographyScale/snapshot.web.desktop'];
+  if (!json['typographyScale/web.snapshot.desktop']) json['typographyScale/web.snapshot.desktop'] = {};
+  const desktopSnapshot = json['typographyScale/web.snapshot.desktop'];
   if (!desktopSnapshot.fontSize) desktopSnapshot.fontSize = {};
 
-  if (!json['typographyScale/snapshot.web.tablet']) json['typographyScale/snapshot.web.tablet'] = {};
-  const tabletSnapshot = json['typographyScale/snapshot.web.tablet'];
+  if (!json['typographyScale/web.snapshot.tablet']) json['typographyScale/web.snapshot.tablet'] = {};
+  const tabletSnapshot = json['typographyScale/web.snapshot.tablet'];
   if (!tabletSnapshot.fontSize) tabletSnapshot.fontSize = {};
 
-  if (!json['typographyScale/snapshot.web.mobile']) json['typographyScale/snapshot.web.mobile'] = {};
-  const mobileSnapshot = json['typographyScale/snapshot.web.mobile'];
+  if (!json['typographyScale/web.snapshot.mobile']) json['typographyScale/web.snapshot.mobile'] = {};
+  const mobileSnapshot = json['typographyScale/web.snapshot.mobile'];
   if (!mobileSnapshot.fontSize) mobileSnapshot.fontSize = {};
 
   if (!json['typographyScale/web.fluid']) json['typographyScale/web.fluid'] = {};
@@ -91,7 +91,7 @@ fs.writeFileSync(tokensPath, JSON.stringify(raw, null, 2) + '\n', 'utf8');
 // Flatten token tree to path -> value (primitives + refs)
 const primitives = {};
 const refs = {};
-const PREFIXES = ['', 'primitives/foundations.', 'layoutScale/base.', 'primitives/typography.foundations.', 'typographyScale/base.', 'typographyScale/snapshot.web.desktop.', 'typographyScale/web.fluid.', 'semantics/web.', 'semantics/ios.'];
+const PREFIXES = ['', 'primitives/foundations.', 'layoutScale/base.', 'primitives/typography.foundations.', 'typographyScale/base.', 'typographyScale/web.snapshot.desktop.', 'typographyScale/web.fluid.', 'semantics/web.', 'semantics/ios.'];
 
 function walk(obj, prefix = '') {
   if (!obj || typeof obj !== 'object') return;

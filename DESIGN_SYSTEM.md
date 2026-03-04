@@ -24,6 +24,13 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 
 ## Token structure (for agents)
 
+**Nested set naming** — For platform-specific token sets we use **platform first**, then subtype/viewport:
+- **layoutScale/** — `base`, then `web.desktop`, `web.mobile`, `web.tablet`, `ios.phone`, `ios.tablet`.
+- **typographyScale/** — `base`, then `web.fluid`, `web.snapshot.desktop`, `web.snapshot.mobile`, `web.snapshot.tablet`, `ios.snapshot.phone`, `ios.snapshot.tablet`.
+- **semantics/** — `web`, `ios`.
+- **colorSemantics/** — `web.light`, `web.dark`, `ios.light`, `ios.dark`.
+- **primitives/** — Category-based (not platform): `foundations`, `typography.foundations`.
+
 - **foundations** — Primitives: `foundations.color.*`, `foundations.radius.*`, `foundations.shadow.*`, `foundations.breakpoints.*`, etc. Raw values and layout/spacing scales. Token set: **primitives/foundations**. Layout scale sets under **layoutScale/**:
   - **layoutScale/base** — canonical desktop baseline. **Primitive naming**: prefix + number; **use 0 only when the value is 0**. Spacing: `space-0`…`space-10` (space-0 = 0, then 0.25rem…8rem). Container/lineLength/media/iconSize have no zero value, so they start at 1: `container-1`…`container-6`, `lineLength-1`…`lineLength-3`, `media-1`…`media-3`, `iconSize-1`…`iconSize-4`. Viewport sets use t-shirt/semantic names and reference these primitives.
   - **layoutScale/web.desktop** — **aliased to base** via references; uses t-shirt names (xs, sm, md, …) and points at base (e.g. `spacing.xs` → `{foundations.scale.base.spacing.space-1}`).
@@ -42,7 +49,7 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 ### Typography snapshots, fluid scale, and canonical
 
 - **Canonical type scale** — **typographyScale/base** `fontSize` uses **type-1…type-9** (0.563rem … 5.61rem). Same rule as other scales: **0 only when value is 0**; type sizes start at 1.
-- **Figma rendering snapshots** — **typographyScale/snapshot.*** Use these in Figma for the frame’s viewport. **typographyScale/snapshot.web.desktop** uses refs like `{fontSize.type-1}`…`{fontSize.type-9}` (xxs→type-1 … 4xl→type-9) so the chain stays single-source. Tablet/mobile snapshots keep **computed** values (~0.9×, ~0.8× base). iOS snapshots are left untouched. Edit only the base scale; re-run the build to sync.
+- **Figma rendering snapshots** — **typographyScale/web.snapshot.*** and **typographyScale/ios.snapshot.*** (platform-first naming). Use these in Figma for the frame’s viewport. **typographyScale/web.snapshot.desktop** uses refs like `{fontSize.type-1}`…`{fontSize.type-9}` (xxs→type-1 … 4xl→type-9) so the chain stays single-source. Tablet/mobile snapshots keep **computed** values (~0.9×, ~0.8× base). iOS snapshots are left untouched. Edit only the base scale; re-run the build to sync.
 
 **Fluid scale for code (`clamp()`)**
 
@@ -70,7 +77,7 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 
 - **color semantics** — **colorSemantics/web.light**, **colorSemantics/web.dark**, **colorSemantics/ios.light**, **colorSemantics/ios.dark** (background, surface, text, border, etc.), including list/table row dividers. Border color lives only in color semantics; **semantics/web** has border focus ring only, not border color.
 - **ios** — **Separate token set** **semantics/ios** (Token Studio: turn on for iOS, off for web). `ios.interactive.minimumTouchTarget` (44pt), `ios.inset.safeArea.top/bottom/left/right` (pt). Use in Figma for iOS frames; disable the **semantics/ios** set when designing web-only.
-- **typographyScale/snapshot.ios.phone** / **typographyScale/snapshot.ios.tablet** — **Separate token sets** (Token Studio: enable with **semantics/ios** for iPhone/iPad). `fontSize.*` in pt (11–40). See [IOS_TYPESTYLES.md](IOS_TYPESTYLES.md).
+- **typographyScale/ios.snapshot.phone** / **typographyScale/ios.snapshot.tablet** — **Separate token sets** (Token Studio: enable with **semantics/ios** for iPhone/iPad). `fontSize.*` in pt (11–40). See [IOS_TYPESTYLES.md](IOS_TYPESTYLES.md).
 - **$themes** — Figma-oriented mapping of token sets to modes/collections.
 
 Adding a new adapter: read this structure (and resolve references `{path.to.token}`), then write the target format. Prefer reusing the resolution logic in `build-tailwind-tokens.js` if the new format needs the same behavior.
