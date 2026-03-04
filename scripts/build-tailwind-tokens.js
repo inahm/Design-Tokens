@@ -14,31 +14,35 @@ const cssOutPath = path.join(__dirname, '..', 'tokens.css');
 
 const raw = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
 
-// Keep typography snapshots and fluid in sync with scale.typography.base.
-// Base uses type-1…type-9. Snapshot web desktop holds refs to base; tablet/mobile get scaled values; fluid gets min/max.
+// Keep typography.scale.web.desktop and typography.snapshot.web.desktop in sync with typography.scale.base.
+// Base uses type-1…type-9. Web desktop holds refs to base; snapshot links to web desktop. Tablet/mobile get scaled values; fluid gets min/max.
 const TYPE_TO_TSHIRT = ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl']; // type-1 → xxs, type-2 → xs, …
 
 function syncTypographySnapshotsWithBase(json) {
   if (!json || typeof json !== 'object') return;
-  const baseScale = json['scale.typography.base'];
+  const baseScale = json['typographyScale/base'];
   if (!baseScale || !baseScale.fontSize) return;
 
   const baseFontSizes = baseScale.fontSize;
 
-  if (!json['scale.typography.snapshot.web.desktop']) json['scale.typography.snapshot.web.desktop'] = {};
-  const desktopSnapshot = json['scale.typography.snapshot.web.desktop'];
+  if (!json['typographyScale/web.desktop']) json['typographyScale/web.desktop'] = {};
+  const webDesktop = json['typographyScale/web.desktop'];
+  if (!webDesktop.fontSize) webDesktop.fontSize = {};
+
+  if (!json['typographyScale/snapshot.web.desktop']) json['typographyScale/snapshot.web.desktop'] = {};
+  const desktopSnapshot = json['typographyScale/snapshot.web.desktop'];
   if (!desktopSnapshot.fontSize) desktopSnapshot.fontSize = {};
 
-  if (!json['scale.typography.snapshot.web.tablet']) json['scale.typography.snapshot.web.tablet'] = {};
-  const tabletSnapshot = json['scale.typography.snapshot.web.tablet'];
+  if (!json['typographyScale/snapshot.web.tablet']) json['typographyScale/snapshot.web.tablet'] = {};
+  const tabletSnapshot = json['typographyScale/snapshot.web.tablet'];
   if (!tabletSnapshot.fontSize) tabletSnapshot.fontSize = {};
 
-  if (!json['scale.typography.snapshot.web.mobile']) json['scale.typography.snapshot.web.mobile'] = {};
-  const mobileSnapshot = json['scale.typography.snapshot.web.mobile'];
+  if (!json['typographyScale/snapshot.web.mobile']) json['typographyScale/snapshot.web.mobile'] = {};
+  const mobileSnapshot = json['typographyScale/snapshot.web.mobile'];
   if (!mobileSnapshot.fontSize) mobileSnapshot.fontSize = {};
 
-  if (!json['scale.typography.web.fluid']) json['scale.typography.web.fluid'] = {};
-  const fluidScale = json['scale.typography.web.fluid'];
+  if (!json['typographyScale/web.fluid']) json['typographyScale/web.fluid'] = {};
+  const fluidScale = json['typographyScale/web.fluid'];
   if (!fluidScale.fontSize) fluidScale.fontSize = {};
 
   function scaleRem(value, factor) {
@@ -56,6 +60,11 @@ function syncTypographySnapshotsWithBase(json) {
     const tshirt = TYPE_TO_TSHIRT[i - 1];
     const entry = baseFontSizes[baseKey];
     if (!entry || typeof entry !== 'object' || entry.value === undefined) continue;
+
+    // typographyScale/web.desktop: ref to base type-N (short path so Tokens Studio can accept it)
+    if (!webDesktop.fontSize[tshirt]) webDesktop.fontSize[tshirt] = {};
+    webDesktop.fontSize[tshirt].value = `{fontSize.${baseKey}}`;
+    webDesktop.fontSize[tshirt].type = entry.type || 'fontSizes';
 
     // Snapshot web desktop: map t-shirt key to numeric primitive (type-N) so it resolves from base
     if (!desktopSnapshot.fontSize[tshirt]) desktopSnapshot.fontSize[tshirt] = {};
@@ -91,7 +100,7 @@ fs.writeFileSync(tokensPath, JSON.stringify(raw, null, 2) + '\n', 'utf8');
 // Flatten token tree to path -> value (primitives + refs)
 const primitives = {};
 const refs = {};
-const PREFIXES = ['', 'primitives.', 'scale.layout.base.', 'typography.foundations.', 'scale.typography.base.', 'scale.typography.snapshot.web.desktop.', 'scale.typography.web.fluid.', 'semantics.web.', 'semantics.ios.'];
+const PREFIXES = ['', 'primitives/foundations.', 'layoutScale/base.', 'primitives/typography.foundations.', 'typographyScale/base.', 'typographyScale/web.desktop.', 'typographyScale/snapshot.web.desktop.', 'typographyScale/web.fluid.', 'semantics/web.', 'semantics/ios.'];
 
 function walk(obj, prefix = '') {
   if (!obj || typeof obj !== 'object') return;
@@ -165,7 +174,7 @@ function hexToRgba(hex, opacity = 1) {
 // Build boxShadow string from token value array
 function boxShadowCss(entry) {
   if (!entry || !entry.value || !Array.isArray(entry.value)) return null;
-  const shadowBaseHex = primitives['primitives.color.shadow.base'] || '#0A0D12';
+  const shadowBaseHex = primitives['primitives/foundations.color.shadow.base'] || '#0A0D12';
   const parts = entry.value.map((s) => {
     const opacity = parseFloat(s.opacity) ?? 1;
     const color = (s.color && resolveRef(s.color)) ? hexToRgba(resolveRef(s.color), opacity) : hexToRgba(shadowBaseHex, opacity);
@@ -174,8 +183,8 @@ function boxShadowCss(entry) {
   return parts.join(', ');
 }
 
-// Flatten nested color object for Tailwind (primitives.color.*)
-const foundations = raw.primitives || {};
+// Flatten nested color object for Tailwind (primitives/foundations.color.*)
+const foundations = raw['primitives/foundations'] || {};
 const color = foundations.color || {};
 const theme = {
   colors: {},
@@ -287,7 +296,7 @@ for (const [k, v] of Object.entries(opacity)) {
 }
 
 // Spacing from foundations.scale.base (space-0…space-10) → t-shirt names for Tailwind/CSS
-const scaleBase = raw['scale.layout.base'] || {};
+const scaleBase = raw['layoutScale/base'] || {};
 const spacingObj = scaleBase.spacing || {};
 const SPACING_SPACE_TO_TSHIRT = { 'space-0': '0', 'space-1': 'xs', 'space-2': 'sm', 'space-3': 'md', 'space-4': 'mdLg', 'space-5': 'lg', 'space-6': 'xl', 'space-7': '2xl', 'space-8': '3xl', 'space-9': '4xl', 'space-10': '5xl' };
 for (const [k, v] of Object.entries(spacingObj)) {
@@ -298,10 +307,10 @@ for (const [k, v] of Object.entries(spacingObj)) {
   }
 }
 
-// Typography from typography.foundations and scale.typography.base (type-1…type-9 → t-shirt for Tailwind).
+// Typography from typography.foundations and typographyScale/base (type-1…type-9 → t-shirt for Tailwind).
 // Snapshot/fluid use refs to type-N for Figma; Tailwind and CSS read base only, so map-back has no impact here.
-const typoFoundations = raw['typography.foundations'] || {};
-const typoScale = raw['scale.typography.base'] || {};
+const typoFoundations = raw['primitives/typography.foundations'] || {};
+const typoScale = raw['typographyScale/base'] || {};
 const fontFamily = typoFoundations.fontFamily || {};
 for (const [k, v] of Object.entries(fontFamily)) {
   if (v && v.value) theme.fontFamily[k] = [v.value, 'sans-serif'];
@@ -339,7 +348,7 @@ for (const [k, v] of Object.entries(textDecoration)) {
 }
 
 // Layout: container, lineLength, media, iconSize (base uses prefix+N starting at 1; map to semantic names for Tailwind)
-const scaleBaseLayout = (raw['scale.layout.base'] && raw['scale.layout.base'].layout) || {};
+const scaleBaseLayout = (raw['layoutScale/base'] && raw['layoutScale/base'].layout) || {};
 const CONTAINER_TO_TSHIRT = { 'container-1': 'xs', 'container-2': 'sm', 'container-3': 'md', 'container-4': 'lg', 'container-5': 'xl', 'container-6': 'fullSpan' };
 const layoutContainer = scaleBaseLayout.container || {};
 for (const [k, v] of Object.entries(layoutContainer)) {
@@ -359,7 +368,7 @@ for (const [k, v] of Object.entries(layoutLineLength)) {
   }
 }
 const MEDIA_TO_TSHIRT = { 'media-1': 'thumbnail', 'media-2': 'card', 'media-3': 'hero' };
-const scaleBaseMedia = (raw['scale.layout.base'] && raw['scale.layout.base'].media) || {};
+const scaleBaseMedia = (raw['layoutScale/base'] && raw['layoutScale/base'].media) || {};
 for (const [k, v] of Object.entries(scaleBaseMedia)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
@@ -368,7 +377,7 @@ for (const [k, v] of Object.entries(scaleBaseMedia)) {
   }
 }
 const ICONSIZE_TO_TSHIRT = { 'iconSize-1': 'sm', 'iconSize-2': 'md', 'iconSize-3': 'lg', 'iconSize-4': 'xl' };
-const scaleBaseIconSize = (raw['scale.layout.base'] && raw['scale.layout.base'].iconSize) || {};
+const scaleBaseIconSize = (raw['layoutScale/base'] && raw['layoutScale/base'].iconSize) || {};
 for (const [k, v] of Object.entries(scaleBaseIconSize)) {
   if (v && v.value) {
     const resolved = resolveVal(v.value);
