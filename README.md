@@ -43,5 +43,15 @@ This repo’s `tokens.json` defines a **responsive, theme‑able design system**
   - Use the min/max pairs from fluid tokens to generate responsive `clamp()` for type and spacing.
   - Map semantic tokens (typography + color) to component props so themes and future rebrands flow automatically.
   - **Breakpoints and scale mapping:** `foundations.breakpoints` (xs/sm/md/lg/xl) define media-query widths; `$metadata.scaleByBreakpoint` describes which scale (mobile / tablet / base) applies at which breakpoint.
+  - **Desktop window sizing:** `foundations.desktop.window.*` defines minimum and preferred desktop window sizes (e.g. Mac app) in px, used to configure the shell while layouts still respond to `foundations.breakpoints`.
   - **Icon size:** `semantics.icon.size.*` resolves to `iconSize` from the **base** scale (see `$metadata.iconSizeResolution`).
+
+### Desktop window sizing tokens
+
+- **Tokens**
+  - `foundations.desktop.window.minWidth` / `minHeight`: the smallest supported desktop window size (e.g. 800×600), where layouts remain usable without collapsing critical UI.
+  - `foundations.desktop.window.preferredWidth` / `preferredHeight`: the default or “ideal” starting window size (e.g. 1280×800) used when opening the app.
+- **Usage**
+  - Use `foundations.breakpoints` (`xs`–`xl`) to drive responsive layout changes (stacked vs. multi-column, sidebars, etc.).
+  - Use `foundations.desktop.window.*` to configure the host window (Electron/Tauri/native shell) and to annotate desktop-specific frames in Figma (e.g. “Designed at preferredWidth × preferredHeight, scales down to `sm`/`md` and up to `xl`).
 
