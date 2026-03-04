@@ -14,8 +14,8 @@ const cssOutPath = path.join(__dirname, '..', 'tokens.css');
 
 const raw = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
 
-// Keep typography.scale.web.desktop and typography.snapshot.web.desktop in sync with typography.scale.base.
-// Base uses type-1…type-9. Web desktop holds refs to base; snapshot links to web desktop. Tablet/mobile get scaled values; fluid gets min/max.
+// Keep typography snapshots and fluid in sync with typographyScale/base.
+// Base uses type-1…type-9. Snapshot web desktop holds refs to base; tablet/mobile get scaled values; fluid gets min/max.
 const TYPE_TO_TSHIRT = ['xxs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl']; // type-1 → xxs, type-2 → xs, …
 
 function syncTypographySnapshotsWithBase(json) {
@@ -24,10 +24,6 @@ function syncTypographySnapshotsWithBase(json) {
   if (!baseScale || !baseScale.fontSize) return;
 
   const baseFontSizes = baseScale.fontSize;
-
-  if (!json['typographyScale/web.desktop']) json['typographyScale/web.desktop'] = {};
-  const webDesktop = json['typographyScale/web.desktop'];
-  if (!webDesktop.fontSize) webDesktop.fontSize = {};
 
   if (!json['typographyScale/snapshot.web.desktop']) json['typographyScale/snapshot.web.desktop'] = {};
   const desktopSnapshot = json['typographyScale/snapshot.web.desktop'];
@@ -60,11 +56,6 @@ function syncTypographySnapshotsWithBase(json) {
     const tshirt = TYPE_TO_TSHIRT[i - 1];
     const entry = baseFontSizes[baseKey];
     if (!entry || typeof entry !== 'object' || entry.value === undefined) continue;
-
-    // typographyScale/web.desktop: ref to base type-N (short path so Tokens Studio can accept it)
-    if (!webDesktop.fontSize[tshirt]) webDesktop.fontSize[tshirt] = {};
-    webDesktop.fontSize[tshirt].value = `{fontSize.${baseKey}}`;
-    webDesktop.fontSize[tshirt].type = entry.type || 'fontSizes';
 
     // Snapshot web desktop: map t-shirt key to numeric primitive (type-N) so it resolves from base
     if (!desktopSnapshot.fontSize[tshirt]) desktopSnapshot.fontSize[tshirt] = {};
@@ -100,7 +91,7 @@ fs.writeFileSync(tokensPath, JSON.stringify(raw, null, 2) + '\n', 'utf8');
 // Flatten token tree to path -> value (primitives + refs)
 const primitives = {};
 const refs = {};
-const PREFIXES = ['', 'primitives/foundations.', 'layoutScale/base.', 'primitives/typography.foundations.', 'typographyScale/base.', 'typographyScale/web.desktop.', 'typographyScale/snapshot.web.desktop.', 'typographyScale/web.fluid.', 'semantics/web.', 'semantics/ios.'];
+const PREFIXES = ['', 'primitives/foundations.', 'layoutScale/base.', 'primitives/typography.foundations.', 'typographyScale/base.', 'typographyScale/snapshot.web.desktop.', 'typographyScale/web.fluid.', 'semantics/web.', 'semantics/ios.'];
 
 function walk(obj, prefix = '') {
   if (!obj || typeof obj !== 'object') return;

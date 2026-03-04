@@ -42,8 +42,7 @@ Figma uses Tokens Studio with token sets that align with `tokens.json` (sync or 
 ### Typography snapshots, fluid scale, and canonical
 
 - **Canonical type scale** — **typographyScale/base** `fontSize` uses **type-1…type-9** (0.563rem … 5.61rem). Same rule as other scales: **0 only when value is 0**; type sizes start at 1.
-- **Typography scale web desktop** — **typographyScale/web.desktop** holds **t-shirt names** (xxs, xs, sm, …) as **refs** to base `type-1`…`type-9`, same pattern as layoutScale/web.desktop. Use in Figma for desktop type scale; values resolve from base so they can’t drift.
-- **Figma rendering snapshots** — **typographyScale/snapshot.*** Where applicable, snapshots **map back to the numeric primitive scale** (type-1…type-9). **typographyScale/snapshot.web.desktop** uses refs like `{fontSize.type-1}`…`{fontSize.type-9}` (xxs→type-1 … 4xl→type-9) so the chain stays single-source. Tablet/mobile snapshots keep **computed** values (~0.9×, ~0.8× base). iOS snapshots are left untouched. Edit only the base scale; re-run the build to sync.
+- **Figma rendering snapshots** — **typographyScale/snapshot.*** Use these in Figma for the frame’s viewport. **typographyScale/snapshot.web.desktop** uses refs like `{fontSize.type-1}`…`{fontSize.type-9}` (xxs→type-1 … 4xl→type-9) so the chain stays single-source. Tablet/mobile snapshots keep **computed** values (~0.9×, ~0.8× base). iOS snapshots are left untouched. Edit only the base scale; re-run the build to sync.
 
 **Fluid scale for code (`clamp()`)**
 
