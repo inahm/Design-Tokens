@@ -57,13 +57,13 @@ The **effect.glass** tokens are composition tokens that map **backgroundBlur** a
 - **effect.glass.sheet** — `backgroundBlur`: {blur.sheet}, `boxShadow`: {shadow.xs}
 - **effect.glass.overlay** — `backgroundBlur`: {blur.overlay}, `boxShadow`: {shadow.sm}
 
-In Tokens Studio, enable the **semantics.web** set (or the set where these live), then use **Apply to selection** or **Export to Figma** (Effect styles) so these compositions drive a single Effect style with both Background blur and Drop shadow. If the plugin exports composition tokens as Effect styles, you get one style per scale (navBar / sheet / overlay) with both effects baked in.
+In Tokens Studio, enable the **semantics/ios** set (or the set where these live), then use **Apply to selection** or **Export to Figma** (Effect styles) so these compositions drive a single Effect style with both Background blur and Drop shadow. If the plugin exports composition tokens as Effect styles, you get one style per scale (navBar / sheet / overlay) with both effects baked in.
 
 ---
 
 ## Glass effects
 
-Use the **surface.glass** scale (navBar / sheet / overlay) for fill, stroke, blur, and shadow:
+Glass semantics live in **iOS** (colorSemantics/ios.light and colorSemantics/ios.dark), not web. Use the **surface.glass** scale (navBar / sheet / overlay) for fill, stroke, blur, and shadow:
 
 - **Fill** → `surface.glass.background.navBar` (or `.sheet`, `.overlay`)
 - **Stroke** → `surface.glass.stroke.navBar` (or `.sheet`, `.overlay`)
