@@ -87,10 +87,10 @@ module.exports = {
     "lg": "8px"
   },
   "boxShadow": {
-    "xs": "0px 1px 2px 0px rgba(10,13,18,0.06)",
-    "sm": "0px 2px 4px -1px rgba(10,13,18,0.1)",
-    "md": "0px 8px 16px -2px rgba(10,13,18,0.16)",
-    "lg": "0px 16px 32px -4px rgba(10,13,18,0.2)"
+    "xs": "0px 1px 2px 0px rgba(15, 23, 42, 0.04)",
+    "sm": "0px 2px 4px -1px rgba(15, 23, 42, 0.08)",
+    "md": "0px 8px 16px -2px rgba(15, 23, 42, 0.08)",
+    "lg": "0px 16px 32px -4px rgba(15, 23, 42, 0.16)"
   },
   "zIndex": {
     "base": "0",

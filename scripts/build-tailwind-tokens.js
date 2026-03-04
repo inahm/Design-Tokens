@@ -162,14 +162,15 @@ function hexToRgba(hex, opacity = 1) {
   return `rgba(${r},${g},${b},${opacity})`;
 }
 
-// Build boxShadow string from token value array
+// Build boxShadow string from token value array (supports hex or rgba alpha token refs)
 function boxShadowCss(entry) {
   if (!entry || !entry.value || !Array.isArray(entry.value)) return null;
   const shadowBaseHex = primitives['primitives/foundations.color.shadow.base'] || '#0A0D12';
   const parts = entry.value.map((s) => {
-    const opacity = parseFloat(s.opacity) ?? 1;
-    const color = (s.color && resolveRef(s.color)) ? hexToRgba(resolveRef(s.color), opacity) : hexToRgba(shadowBaseHex, opacity);
-    return `${s.x}px ${s.y}px ${s.blur}px ${s.spread}px ${color}`;
+    const resolved = s.color && s.color.startsWith('{') ? resolveRef(s.color) : (s.color || shadowBaseHex);
+    const col = resolved || shadowBaseHex;
+    const colorStr = col.startsWith('rgba(') ? col : hexToRgba(col, parseFloat(s.opacity) ?? 1);
+    return `${s.x}px ${s.y}px ${s.blur}px ${s.spread}px ${colorStr}`;
   });
   return parts.join(', ');
 }
@@ -239,18 +240,22 @@ for (const [k, v] of Object.entries(borderWidth)) {
   if (v && v.value !== undefined) theme.borderWidth[k] = v.value;
 }
 
-// Box shadow (foundations.shadow)
+// Box shadow (foundations.shadow) — color may be hex or rgba (e.g. alpha token ref)
 const shadow = foundations.shadow || {};
 const shadowBaseHex = theme.colors['shadow-base'] || '#0A0D12';
 for (const [k, v] of Object.entries(shadow)) {
   if (v && v.value && Array.isArray(v.value)) {
     const parts = v.value.map((s) => {
-      const opacity = parseFloat(s.opacity) ?? 0.1;
-      const col = s.color && s.color.startsWith('{') ? shadowBaseHex : (s.color || shadowBaseHex);
-      const r = parseInt(col.slice(1, 3), 16);
-      const g = parseInt(col.slice(3, 5), 16);
-      const b = parseInt(col.slice(5, 7), 16);
-      return `${s.x}px ${s.y}px ${s.blur}px ${s.spread}px rgba(${r},${g},${b},${opacity})`;
+      const resolvedColor = s.color && s.color.startsWith('{') ? resolveRef(s.color) : (s.color || shadowBaseHex);
+      const col = resolvedColor || shadowBaseHex;
+      let colorStr;
+      if (col.startsWith('rgba(')) {
+        colorStr = col;
+      } else {
+        const opacity = parseFloat(s.opacity) ?? 0.1;
+        colorStr = hexToRgba(col, opacity);
+      }
+      return `${s.x}px ${s.y}px ${s.blur}px ${s.spread}px ${colorStr}`;
     });
     theme.boxShadow[k] = parts.join(', ');
   }
