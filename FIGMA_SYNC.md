@@ -61,13 +61,16 @@ In Tokens Studio, enable the **semantics/ios** set, then use **Apply to selectio
 
 ## Glass effects
 
-Glass semantics live in **iOS** (colorSemantics/ios.light and colorSemantics/ios.dark), not web. One glass treatment with five tokens:
+**Color** (fill, stroke, highlight) live in **iOS color semantics** (colorSemantics/ios.light and colorSemantics/ios.dark):
 
 - **Fill** → `surface.glass.background`
 - **Stroke** → `surface.glass.stroke`
 - **Highlight** → `surface.glass.highlight` — lighter edge for top/left (optional second stroke)
-- **Blur** → `surface.glass.blur`
-- **Shadow** → `surface.glass.shadow`
+
+**Blur and shadow** live in **semantics/ios** (not color):
+
+- **Blur** → `glass.blur` (semantics/ios)
+- **Shadow** → `glass.shadow` (semantics/ios)
 
 **Nuanced stroke (true glass edge):** Apply **stroke** as the main border, then add a second stroke (or inner path) with **highlight** — typically thinner and on the top/left where light would catch the edge.
 
